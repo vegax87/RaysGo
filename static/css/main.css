@@ -5,3 +5,7 @@ body{
 	padding-top: 70px;
 	padding-bottom: 30px;
 }
+
+.container{
+	max-width: 970px;
+}
