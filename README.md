@@ -1,4 +1,5 @@
 RaysGo
 ======
 
-Simple CMS implemented in Go!
+A simple generic blog system implemented in Go!
+
