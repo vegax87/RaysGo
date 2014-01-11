@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="RaysGo">
-    <meta name="keywords" content="RaysGo">
-    <meta name="author" content="Raysmond">
+    <meta name="description" content="{{.Description}}">
+    <meta name="keywords" content="{{.Keywords}}">
+    <meta name="author" content="{{.Author}}">
 
-    <title>{{.title}}</title>
+    <title>{{.Title}}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
