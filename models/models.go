@@ -12,18 +12,29 @@ import (
 var (
 	Engine *xorm.Engine
 )
+
+const (
+	ROLE_ANONYMOUS = 0
+	ROLE_ADMIN = 1
+	ROLE_AUTHENTICATED = 2
+	
+	BLOCKED = 0
+	ACTIVE = 1
+	DELETED = 2
+)
+
 // models declaration
 type User struct {
 	Id         int64
 	Rid        int64     `xorm:"index"`
-	Name       string    `xorm:"not null unique"`
-	Email      string    `xorm:"not null unique"`
-	Password   string    `xorm:"not null"`
+	Name       string    `xorm:"not null unique" form:"name" valid:"Required;MaxSize(30);MinSize(5)"`
+	Email      string    `xorm:"not null unique" form:"email" valid:"Required;Email"`
+	Password   string    `xorm:"not null" form:"password" valid:"Required;MinSize(5);MaxSize(30)"`
 	CreateTime time.Time `xorm:"index"`
 	LoginTime  time.Time
 	Picture    string
-	Signature  string
-	Status     int `xorm:"not null default 0"`
+	Signature  string `form:"signature"`
+	Status     int    `xorm:"not null default 0" form:"status" valid:"Range(1,2)"`
 }
 
 type Role struct {
@@ -40,11 +51,11 @@ type NodeType struct {
 
 type Node struct {
 	Id          int64
-	Uid         int64  `xorm:"index"`
-	Tid         int64  `xorm:"index"`
-	Title       string `xorm:"not null"`
-	Content     string `xorm:"text"`
-	ContentType string
+	Uid         int64     `xorm:"index"`
+	Tid         int64     `xorm:"index"`
+	Title       string    `xorm:"not null" form:"title" valid:"Required;MaxSize(50)"`
+	Content     string    `xorm:"text" form:"content"`
+	ContentType string    `xorm:"not null"`
 	Summary     string    `xorm:"text"`
 	CreateTime  time.Time `xorm:"index"`
 	UpdateTime  time.Time
@@ -53,17 +64,17 @@ type Node struct {
 type Category struct {
 	Id          int64
 	Uid         int64  `xorm:"index"`
-	Name        string `xorm:"not null"`
-	Description string `xorm:"text"`
+	Name        string `xorm:"not null" form:"name" valid:"Required;MaxSize(30)"`
+	Description string `xorm:"text" form:"description"`
 }
 
 type CategoryTerm struct {
 	Id     int64
 	Uid    int64  `xorm:"index"`
-	Cid    int64  `xorm:"index"`
-	Pid    int64  `xorm:"index default 0"`
-	Name   string `xorm:"not null"`
-	Weight int64  `xorm:"default 0"`
+	Cid    int64  `xorm:"index" form:"category_id" valid:"Required"`
+	Pid    int64  `xorm:"index default 0" form:"parent_id"`
+	Name   string `xorm:"not null" form:"name" valid:"Required"`
+	Weight int64  `xorm:"default 0" form:"weight"`
 }
 
 type Comment struct {

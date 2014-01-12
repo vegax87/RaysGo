@@ -32,15 +32,22 @@ func (this *UserController) View() {
 }
 
 func (this *UserController) Register() {
-	//	valid := validation.Validation{}
-	user := models.User{
-		Name:       this.GetString("name"),
-		Email:      this.GetString("email"),
-		Password:   this.GetString("password"),
-		Status:     1,
-		Rid:        2,
-		CreateTime: time.Now(),
+	valid := validation.Validation{}
+
+	user := models.User{}
+	if err := this.ParseForm(&user); err!=nil{
+		fmt.Println(err)
+	}else{
+		
 	}
+	// user := models.User{
+	// 	Name:       this.GetString("name"),
+	// 	Email:      this.GetString("email"),
+	// 	Password:   this.GetString("password"),
+	// 	Status:     1,
+	// 	Rid:        2,
+	// 	CreateTime: time.Now(),
+	// }
 	user.Password = helpers.EncryptPassword(user.Password, nil)
 
 	//	b, valid_err := valid.Valid(user)
