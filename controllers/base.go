@@ -31,7 +31,9 @@ func (this *BaseController) userSession(){
         this.Data["UserName"] = ""
         this.Data["UserRole"] = 0
         this.Data["UserEmail"] = ""
+        this.Data["IsLogin"] = false
 	} else{
+		this.Data["IsLogin"] = true
 		this.Data["UserId"] = session_uid
         this.Data["UserName"] = session_username
         this.Data["UserRole"] = session_role_id
@@ -68,3 +70,4 @@ func (this *BaseController) GoView(view ...string) {
 		this.TplNames = view[0] + ViewFileExtension
 	}
 }
+

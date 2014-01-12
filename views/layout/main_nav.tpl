@@ -14,6 +14,16 @@
                 <li class="active"><a href="/">Home</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
+                {{ if .IsLogin }}
+                <li><a href="/user/view/{{.UserId}}">{{.UserName}}</a></li>
+                <li><a href="/user/logout">Logout</a></li>
+                {{ end }}
+                
+                {{ if not .IsLogin }}
+                <li><a href="/user/login">Login</a></li>
+                <li><a href="/user/register">Register</a></li>
+                {{ end }}
+                
             </ul>
         </div>
         <!--/.nav-collapse -->

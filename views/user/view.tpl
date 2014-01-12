@@ -1,2 +1,7 @@
 <h1>User - {{.user.Name}}</h1>
-{{.userId}}
+Role: {{.user.Rid}} <br/>
+ID: {{.user.Id}} <br/>
+Email: {{.user.Email}} <br/>
+Register: {{.user.CreateTime}} <br/>
+
+
