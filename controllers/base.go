@@ -20,6 +20,14 @@ type BaseController struct {
 	actionName     string
 }
 
+type AuthController struct{
+	BaseController
+}
+
+type AdminController struct{
+	BaseController
+}
+
 func (this *BaseController) userSession(){
 	session_username, _ = this.GetSession("username").(string)
 	session_uid, _ = this.GetSession("userid").(int)
@@ -52,10 +60,6 @@ func (this *BaseController) Prepare() {
 	this.Layout = beego.AppConfig.String("defaultLayout")
 }
 
-func loadtimes(t time.Time) int {
-	return int(time.Now().Sub(t).Nanoseconds() / 1e6)
-}
-
 func (this *BaseController) setMetas(metas map[string]string) {
 	for key, value := range metas {
 		this.Data[key] = value
@@ -69,5 +73,9 @@ func (this *BaseController) GoView(view ...string) {
 	if len(view) > 0 {
 		this.TplNames = view[0] + ViewFileExtension
 	}
+}
+
+func loadtimes(t time.Time) int {
+	return int(time.Now().Sub(t).Nanoseconds() / 1e6)
 }
 
