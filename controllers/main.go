@@ -1,8 +1,7 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego/orm"
-	"RaysGo/models"
+//	"RaysGo/models"
 )
 
 type MainController struct {
@@ -20,21 +19,9 @@ func (this *MainController) Get() {
 		"Keywords" : "RaysGo, Raysmond",
 		})
 
-	// this.Layout = "layout/default.tpl"
-	this.TplNames = "index.tpl"
+	this.GoView("index","layout/default")
 }
 
 func (this *MainController) Index() {
-	var users []*models.User
-
-	this.Layout = "layout/default.tpl"
-
-    user := new(models.User)
-	query := orm.NewOrm().QueryTable(user)
-	count, _ := query.Count()
-	query.OrderBy("-uid").All(&users)
-
-	this.Data["users"] = users
-	this.Data["count"] = count
-	this.TplNames = "users.tpl"
+	this.GoView("users")
 }

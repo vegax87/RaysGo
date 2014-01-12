@@ -26,27 +26,7 @@
 
 <body>
 
-<!-- Fixed navbar -->
-<div id="main-nav" class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">RaysGo</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </div>
-        <!--/.nav-collapse -->
-    </div>
-</div>
+{{template "layout/main_nav.tpl" .}}
 
 <div id="main-wrapper" class="container">
     <div id="message" class="container">
@@ -57,16 +37,8 @@
         {{.LayoutContent}}
     </div>
 </div>
-<!-- /container -->
 
-<div id="footer" class="container">
-    <hr>
-    Copyright &copy; Raysmond 2014. All Right Reserved. - {{.PageStartTime|loadtimes}}ms
-    <span style="float: right;">Theme based on <a href="http://getbootstrap.com/">Bootstrap</a> and powered by <a
-            href="https://github.com/astaxie/beego">beego</a></span>
-</div>
+{{template "layout/footer.tpl" .}}
 
-<!-- Custom JavaScript  -->
-<script src="/static/js/main.js"></script>
 </body>
 </html>
