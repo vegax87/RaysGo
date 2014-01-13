@@ -4,6 +4,7 @@ import (
 	"RaysGo/helpers"
 	"RaysGo/models"
 	"fmt"
+	"github.com/astaxie/beego/validation"
 	"strconv"
 	"time"
 )
@@ -13,7 +14,6 @@ type UserController struct {
 }
 
 func (this *UserController) Get() {
-	//	this.TplNames = "user/index.tpl"
 	this.GoView("user/index")
 }
 
@@ -28,6 +28,7 @@ func (this *UserController) View() {
 	}
 
 	this.Data["user"] = user
+	this.setMeta("Title", user.Name)
 	this.GoView("user/view")
 }
 
@@ -35,46 +36,30 @@ func (this *UserController) Register() {
 	valid := validation.Validation{}
 
 	user := models.User{}
-	if err := this.ParseForm(&user); err!=nil{
+	if err := this.ParseForm(&user); err != nil {
 		fmt.Println(err)
-	}else{
-		
-	}
-	// user := models.User{
-	// 	Name:       this.GetString("name"),
-	// 	Email:      this.GetString("email"),
-	// 	Password:   this.GetString("password"),
-	// 	Status:     1,
-	// 	Rid:        2,
-	// 	CreateTime: time.Now(),
-	// }
-	user.Password = helpers.EncryptPassword(user.Password, nil)
-
-	//	b, valid_err := valid.Valid(user)
-	//	if valid_err != nil {
-	//		// handle error
-	//	}
-	//	if !b {
-	//		for _, verr := range valid.Errors {
-	//			fmt.Println(verr.Key + " : " + verr.Message)
-	//		}
-	//	} else {
-	//		user.Password = helpers.EncryptPassword(user.Password,nil)
-	//		id, err := orm.NewOrm().Insert(&user)
-	//		if err == nil {
-	//			this.Redirect("/user/view/"+strconv.Itoa(int(id)), 302)
-	//		}
-	//	}
-
-	_, err := models.Engine.Insert(&user)
-	if err == nil {
-		this.Redirect("/user/view/"+strconv.Itoa(int(user.Id)), 302)
+	} else {
+		user.Status = 1
+		user.CreateTime = time.Now()
+		user.Rid = 2
 	}
 
-	this.setMetas(map[string]string{
-		"Title": "Register",
-	})
+	ok, valid_err := valid.Valid(user)
+	if valid_err != nil {
+		// 
+	}
+	if !ok {
+		for _, verr := range valid.Errors {
+			fmt.Println(verr.Key + " : " + verr.Message)
+		}
+	} else {
+		user.Password = helpers.EncryptPassword(user.Password, nil)
+		if _, err := models.Engine.Insert(&user); err == nil {
+			this.Redirect("/user/view/"+strconv.Itoa(int(user.Id)), 302)
+		}
+	}
 
+	this.setMeta("Title", "Register")
 	this.GoView("user/register")
 }
 
@@ -97,9 +82,7 @@ func (this *UserController) Login() {
 		}
 	}
 
-	this.setMetas(map[string]string{
-		"Title": "Login",
-	})
+	this.setMeta("Title", "Login")
 	this.GoView("user/login")
 }
 
@@ -113,7 +96,6 @@ func (this *UserController) Logout() {
 
 func (this *UserController) Edit() {
 	//	id, _ := strconv.Atoi(this.Ctx.Input.Param(":id"))
-
 
 	this.GoView("edit")
 }

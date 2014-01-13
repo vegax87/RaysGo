@@ -27,14 +27,14 @@ const (
 type User struct {
 	Id         int64
 	Rid        int64     `xorm:"index"`
-	Name       string    `xorm:"not null unique" form:"name" valid:"Required;MaxSize(30);MinSize(5)"`
-	Email      string    `xorm:"not null unique" form:"email" valid:"Required;Email"`
-	Password   string    `xorm:"not null" form:"password" valid:"Required;MinSize(5);MaxSize(30)"`
+	Name       string    `xorm:"not null unique"`
+	Email      string    `xorm:"not null unique"`
+	Password   string    `xorm:"not null"`
 	CreateTime time.Time `xorm:"index"`
 	LoginTime  time.Time
 	Picture    string
 	Signature  string `form:"signature"`
-	Status     int    `xorm:"not null default 0" form:"status" valid:"Range(1,2)"`
+	Status     int    `xorm:"not null default 0"`
 }
 
 type Role struct {
@@ -53,7 +53,7 @@ type Node struct {
 	Id          int64
 	Uid         int64     `xorm:"index"`
 	Tid         int64     `xorm:"index"`
-	Title       string    `xorm:"not null" form:"title" valid:"Required;MaxSize(50)"`
+	Title       string    `xorm:"not null" form:"title"`
 	Content     string    `xorm:"text" form:"content"`
 	ContentType string    `xorm:"not null"`
 	Summary     string    `xorm:"text"`
@@ -64,17 +64,17 @@ type Node struct {
 type Category struct {
 	Id          int64
 	Uid         int64  `xorm:"index"`
-	Name        string `xorm:"not null" form:"name" valid:"Required;MaxSize(30)"`
+	Name        string `xorm:"not null" form:"name"`
 	Description string `xorm:"text" form:"description"`
 }
 
 type CategoryTerm struct {
 	Id     int64
 	Uid    int64  `xorm:"index"`
-	Cid    int64  `xorm:"index" form:"category_id" valid:"Required"`
-	Pid    int64  `xorm:"index default 0" form:"parent_id"`
-	Name   string `xorm:"not null" form:"name" valid:"Required"`
-	Weight int64  `xorm:"default 0" form:"weight"`
+	Cid    int64  `xorm:"index" form:"category_id"`
+	Pid    int64  `xorm:"index default 0"`
+	Name   string `xorm:"not null"`
+	Weight int64  `xorm:"default 0"`
 }
 
 type Comment struct {
