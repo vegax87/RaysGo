@@ -5,10 +5,7 @@ import (
 	 "RaysGo/models"
 	 "fmt"
 	 "github.com/astaxie/beego/validation"
-	 // "github.com/astaxie/beego"
-	// "strconv"
 	 "time"
-	//"strings"
 )
 
 type LoginController struct{

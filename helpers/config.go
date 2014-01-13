@@ -33,6 +33,5 @@ func LoadConf(){
     ActiveCodeLives,_ = beego.AppConfig.Int("ActiveCodeLives")
     ResetPwdCodeLives,_ = beego.AppConfig.Int("ResetPwdCodeLives")
     LoginRememberDays,_ = beego.AppConfig.Int("LoginRememberDays")
-   
 }
 
