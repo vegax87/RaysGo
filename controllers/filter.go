@@ -1,28 +1,29 @@
 package controllers
 
-import(
-	"github.com/astaxie/beego/context"
-)
-
 type AuthInterface interface {
 	AuthActions() []string
 }
 
-var FilterUser = func(ctx *context.Context) {
-    _, ok := ctx.Input.Session("useruid").(int)
-    if !ok {
-        ctx.Redirect(302, "/login")
-    }
+func (this *AdminController) Get(){
+
+	this.Data["Title"] = "Administration"
+	this.TplNames = "admin/admin.html"
 }
 
-var FilterAdmin = func(ctx *context.Context){
-	_, okAdmin := ctx.Input.Session("userrole").(int)
-	if !okAdmin {
-		ctx.Redirect(302, "/")
+func (this *AdminController) AuthPrepare(){
+	if !this.isLogin {
+		this.Redirect("/login", 302)
+		return
+	}
+
+	if !this.User().IsAdmin() {
+		this.FlashError("You don't have the permission to access the page.")
+		this.SaveFlash()
+		this.Redirect("/", 302)
 	}
 }
 
-func (this *AuthController) NestPrepare(){
+func (this *AuthController) AuthPrepare(){
 	var actions []string
 	if app, ok := this.AppController.(AuthInterface); ok {
 		actions = app.AuthActions()

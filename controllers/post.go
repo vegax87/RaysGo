@@ -12,10 +12,12 @@ type PostController struct{
 	AuthController
 }
 
+// Actions only available for login users
 func (this *PostController) AuthActions() []string{
 	return []string{ "List", "New", "NewPost", "Edit", "EditPost", "Delete"}
 }
 
+// View a post
 func (this *PostController) View(){
 	id,_ := helpers.Str2Int64(this.GetParam(":id"))
 
@@ -47,11 +49,13 @@ func (this *PostController) List(){
 	}
 }
 
+// Create new post
 func (this *PostController) New(){
 	this.Data["Title"] = "New post"
 	this.TplNames = "post/new.html"
 }
 
+// Post implemented creating new post
 func (this *PostController) NewPost(){
 	var(
 		valid validation.Validation
@@ -91,6 +95,7 @@ func (this *PostController) NewPost(){
 	this.TplNames = "post/new.html"
 }
 
+// Edit a post
 func (this *PostController) Edit(){
 	id,_ := helpers.Str2Int64(this.GetParam(":id"))
 	var post *models.Node
@@ -115,6 +120,7 @@ func (this *PostController) Edit(){
 
 }
 
+// Post implemented editing a post
 func (this *PostController) EditPost(){
 	var(
 		post *models.Node
@@ -173,19 +179,18 @@ func (this *PostController) canEditPost(post *models.Node) bool{
 
 func (this *PostController) Delete(){
 	id,_ := helpers.Str2Int64(this.GetParam(":id"))
-	if post := models.GetNode(id); post != nil && this.canEditPost(post) {
-		models.Engine.Id(id).Delete(&models.Node{})
-		if _, err := models.Engine.Id(id).Delete(new(models.Node)); err == nil {
+	post := models.GetNode(id); 
+	if post != nil && this.canEditPost(post) {
+		if err := models.DelNode(id); err == nil {
 			this.FlashNotice("Post was deleted successfully.")
 			this.SaveFlash()
 			this.Redirect("/myposts", 302)
-		} else {
-			this.FlashNotice("Deleting post failed.")
-			this.SaveFlash()
-			// TODO : return to the former uri
-		}
-		
+			return
+		} 	
 	}
-
+	
+	this.FlashNotice("Deleting post failed.")
+	this.SaveFlash()
+	// TODO : return to the former uri
 	this.Abort("404")
 }

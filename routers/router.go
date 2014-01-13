@@ -2,6 +2,7 @@ package routers
 
 import (
 	"RaysGo/controllers"
+    "RaysGo/controllers/admin"
 	"github.com/astaxie/beego"
 )
 
@@ -28,4 +29,10 @@ func init() {
     beego.Router("/post/view/:id:int", post, "*:View")
     beego.Router("/post/edit/:id:int", post, "*:Edit;post:EditPost")
     beego.Router("/post/delete/:id:int", post, "*:Delete")
+
+    // admin
+    beego.Router("/admin", &controllers.AdminController{})
+
+    config := new(admin.ConfigController)
+    beego.Router("/admin/config", config, "*:Config;post:ConfigPost")
 }

@@ -120,7 +120,8 @@ type UriAlias struct {
 }
 
 type Variable struct {
-	Id    int64
+	Id int64
+	Name  string `xorm:"unique not null"`
 	Value string `xorm:"text"`
 }
 
@@ -203,4 +204,5 @@ func CreateDb() {
 	} else {
 		fmt.Println("Database sync successfully.")
 	}
+
 }

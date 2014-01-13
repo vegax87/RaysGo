@@ -31,6 +31,11 @@ func GetNode(id int64) *Node{
 	return nil
 }
 
+func DelNode(id int64) error{
+	_, e := Engine.Id(id).Delete(new(Node))
+	return e
+}
+
 func (this *Node) ParseContent() string{
 	if this.ContentType == CONTENT_TYPE_MARKDOWN {
 		return string(helpers.Markdown([]byte(this.Content)))

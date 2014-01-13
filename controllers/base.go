@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"RaysGo/models"
+	"RaysGo/helpers"
 	"github.com/astaxie/beego"
 	// "github.com/astaxie/beego/i18n"
 	"time"
@@ -20,11 +21,15 @@ type NestPreparer interface {
         NestPrepare()
 }
 
+type AuthPreparer interface{
+	AuthPrepare()
+}
+
 type BaseController struct {
 	beego.Controller
 	controllerName string
 	actionName     string
-	user           models.User
+	user           *models.User
 	isLogin        bool
 	flash          *beego.FlashData   // flash data from the last action
 	newFlash       *beego.FlashData 
@@ -58,31 +63,41 @@ func (this *BaseController) userSession() {
 		this.Data["UserName"] = session_username
 		this.Data["UserRole"] = session_role_id
 		this.Data["UserEmail"] = session_email
-		this.user = models.User{
+		this.user = &models.User{
 			Id : int64(session_uid),
 			Name : session_username,
 			Rid : int64(session_role_id),
 			Email : session_email,
 		}
+		this.Data["IsAdmin"] = this.user.IsAdmin()
 	}
 }
 
 func (this *BaseController) Prepare() {
-
 	this.controllerName, this.actionName = this.GetControllerAndAction()
 	this.userSession()
-
 	this.flash = beego.ReadFromRequest(&this.Controller)
 
+	helpers.LoadConf()
+	models.LoadAndSetConfig()
+
 	this.Data["PageStartTime"] = time.Now()
+	this.Data["AppName"] = helpers.AppName
+	this.Data["AppDescription"] = helpers.AppDescription
+	this.Data["AppKeywords"] = helpers.AppKeywords
+	this.Data["AppAuthor"] = helpers.AppAuthor
 	this.Layout = beego.AppConfig.String("defaultLayout")
+
+	if app, ok := this.AppController.(AuthPreparer); ok {
+		app.AuthPrepare()
+    }
 
 	if app, ok := this.AppController.(NestPreparer); ok {
 		app.NestPrepare()
     }
 }
 
-func (this *BaseController) User() models.User{
+func (this *BaseController) User() *models.User{
 	return this.user
 }
 

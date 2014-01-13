@@ -1,0 +1,14 @@
+<div class="page-header"><h1>Website configuration</h1></div>
+
+<form action="/admin/config" method="post" class="form" >
+
+<input type="text" name="AppName" value="{{.Form.AppName}}" class="form-control" placeholder="Application name"  />
+
+<input type="text" name="AppDescription" value="{{.Form.AppDescription}}" class="form-control" placeholder="Website description"  />
+<input type="text" name="AppKeywords" value="{{.Form.AppKeywords}}" class="form-control" placeholder="Website keywords"  />
+<input type="text" name="MailUser" value="{{.Form.MailUser}}" class="form-control" placeholder="Mail of the website"  />
+<input type="text" name="MailFrom" value="{{.Form.MailFrom}}" class="form-control" placeholder="Mail name"  />
+
+<br/>
+<input type="submit" value="Save configuration" class="btn btn-info"  />
+</form>
