@@ -28,12 +28,36 @@ func GetNode(id int64) *Node{
 	if has, e := Engine.Get(node); has && e == nil{
 		return node
 	}
-
 	return nil
 }
 
-func (this *Node) ParseContent(){
+func (this *Node) ParseContent() string{
 	if this.ContentType == CONTENT_TYPE_MARKDOWN {
-		this.Content = string(helpers.Markdown([]byte(this.Content)))
+		return string(helpers.Markdown([]byte(this.Content)))
 	}
+	return this.Content
+}
+
+func GetStatusName(status int) string{
+	switch status {
+	case DRAFT:
+		return "draft"
+	case PUBLISHED:
+		return "published"
+	case PRIVATE:
+		return "private"
+	}
+	return "published"
+}
+
+func GetStatus(name string) int{
+	switch name{
+	case "published":
+		return PUBLISHED 
+	case "private":
+		return PRIVATE
+	case "draft":
+		return DRAFT
+	}
+	return PUBLISHED
 }

@@ -21,4 +21,5 @@ func AddViewFunc(){
 	beego.AddFuncMap("loadtimes", Loadtimes)
 	beego.AddFuncMap("show_flash", ShowFlashError)
 	beego.AddFuncMap("site_title", SiteTitle)
+	beego.AddFuncMap("markdown", MarkdownHtml)
 }

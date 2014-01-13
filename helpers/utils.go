@@ -9,6 +9,9 @@ import (
 	"time"
 	"strconv"
 	"github.com/russross/blackfriday"
+	"github.com/astaxie/beego"
+	"html/template"
+
 )
 
 func EncryptPassword(password string, salt []byte) string {
@@ -62,5 +65,9 @@ func Str2Int64(s string) (int64, error){
 
 func Markdown(raw []byte) []byte {
    return blackfriday.MarkdownCommon(raw)
+}
+
+func MarkdownHtml(s string) template.HTML{
+	 return beego.Str2html(string(Markdown([]byte(s))))
 }
 

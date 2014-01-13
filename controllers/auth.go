@@ -17,6 +17,9 @@ type LoginController struct{
 
 // Get implemented login page
 func (this * LoginController) Get(){
+	if this.isLogin {
+		this.Redirect("/user/view/" + fmt.Sprintf("%d", this.User().Id), 302)
+	}
 	this.Data["Title"] = "Login"
 	this.TplNames = "auth/login.html"
 	

@@ -5,5 +5,13 @@
 </div>
 
 <div class="post-content">
-{{str2html .Post.Content}}
+{{markdown .Post.Content}}
 </div>
+
+{{ if .CanEdit }}
+<hr>
+<div class="actions">
+<a href="/post/edit/{{.Post.Id}}" class="btn btn-info btn-xs">Edit</a>
+<a href="/post/delete/{{.Post.Id}}" class="btn btn-danger btn-xs">Delete</a>
+</div>
+{{ end }}

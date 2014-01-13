@@ -8,9 +8,9 @@
 
 <label>Content type</label>
 <select name="ContentType" class="form-control">
-<option value="plain_text">Plain text</option>
-<option value="html">Html</option>
-<option value="markdown">Markdown</option>
+<option value="plain_text" {{if .TYPE_plain_text}} selected="true" {{end}}>Plain text</option>
+<option value="html" {{if .TYPE_html}} selected="true" {{end}}>Html</option>
+<option value="markdown" {{if .TYPE_markdown}} selected="true" {{end}}>Markdown</option>
 </select>
 
 <label for="Tags">Tags</label>
@@ -18,9 +18,9 @@
 
 <label>Status</label>
 <select name="Status" class="form-control">
-<option value="draft">Draft</option>
-<option value="published">Published</option>
-<option value="private">Private</option>
+<option value="draft" {{if .STATUS_draft}} selected="true" {{end}}>Draft</option>
+<option value="published" {{if .STATUS_published}} selected="true" {{end}}>Published</option>
+<option value="private" {{if .STATUS_private}} selected="true" {{end}}>Private</option>
 </select>
 
 <br/>

@@ -23,9 +23,9 @@ func init() {
     beego.Router("/user/edit/:id:int", user, "*:Edit")
 
     post := new(controllers.PostController)
-    beego.Router("/post/view/:id:int", post, "*:View")
     beego.Router("/myposts", post, "*:List")
     beego.Router("/post/new", post, "*:New;post:NewPost")
-    beego.Router("/post/edit", post, "*:Edit;post:EditPost")
+    beego.Router("/post/view/:id:int", post, "*:View")
+    beego.Router("/post/edit/:id:int", post, "*:Edit;post:EditPost")
     beego.Router("/post/delete/:id:int", post, "*:Delete")
 }

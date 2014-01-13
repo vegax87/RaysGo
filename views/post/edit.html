@@ -1,0 +1,29 @@
+<div class="page-header"><h1>Edit : {{.Post.Title}}</h1></div>
+
+<form action="/post/edit/{{.Post.Id}}" method="post" class="form" >
+
+<input type="text" name="Title" value="{{.Form.Title}}" class="form-control" placeholder="Title"  />
+
+<textarea placeholder="Content" name="Content" class="form-control" style="height: 300px;">{{.Form.Content}}</textarea>
+
+<label>Content type</label>
+<select name="ContentType" class="form-control">
+<option value="plain_text" {{if .TYPE_plain_text}} selected="true" {{end}}>Plain text</option>
+<option value="html" {{if .TYPE_html}} selected="true" {{end}}>Html</option>
+<option value="markdown" {{if .TYPE_markdown}} selected="true" {{end}}>Markdown</option>
+</select>
+
+<label for="Tags">Tags</label>
+<input type="text" name="Tags" value="{{.Form.Tags}}" class="form-control" placeholder="Tags, seperated by ','" />
+
+<label>Status</label>
+<select name="Status" class="form-control">
+<option value="draft" {{if .STATUS_draft}} selected="true" {{end}}>Draft</option>
+<option value="published" {{if .STATUS_published}} selected="true" {{end}}>Published</option>
+<option value="private" {{if .STATUS_private}} selected="true" {{end}}>Private</option>
+</select>
+
+<br/>
+<input type="submit" name="" value="Save" class="btn btn-info"  />
+
+</form>
