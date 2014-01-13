@@ -53,8 +53,8 @@ type Node struct {
 	Id          int64
 	Uid         int64     `xorm:"index"`
 	Tid         int64     `xorm:"index"`
-	Title       string    `xorm:"not null" form:"title"`
-	Content     string    `xorm:"text" form:"content"`
+	Title       string    `xorm:"not null"`
+	Content     string    `xorm:"text"`
 	ContentType string    `xorm:"not null"`
 	Summary     string    `xorm:"text"`
 	CreateTime  time.Time `xorm:"index"`
@@ -64,14 +64,14 @@ type Node struct {
 type Category struct {
 	Id          int64
 	Uid         int64  `xorm:"index"`
-	Name        string `xorm:"not null" form:"name"`
-	Description string `xorm:"text" form:"description"`
+	Name        string `xorm:"not null"`
+	Description string `xorm:"text"`
 }
 
 type CategoryTerm struct {
 	Id     int64
 	Uid    int64  `xorm:"index"`
-	Cid    int64  `xorm:"index" form:"category_id"`
+	Cid    int64  `xorm:"index"`
 	Pid    int64  `xorm:"index default 0"`
 	Name   string `xorm:"not null"`
 	Weight int64  `xorm:"default 0"`

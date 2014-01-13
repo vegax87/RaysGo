@@ -5,6 +5,7 @@ import (
 	 "RaysGo/models"
 	 "fmt"
 	 "github.com/astaxie/beego/validation"
+	 // "github.com/astaxie/beego"
 	// "strconv"
 	 "time"
 	//"strings"
@@ -46,14 +47,14 @@ func (this * LoginController) Login(){
 				this.Redirect("/user/view/" + fmt.Sprintf("%d", user.Id), 302)
 			}
 		} else {
-			for _, verr := range valid.Errors {
-				fmt.Println(verr.Key + " : " + verr.Message)
+			for _, e := range valid.Errors {
+				this.FlashError(e.Key + " : " + e.Message)
 			}
 		}
 	}
 
-	this.Data["Title"] = "Login"
-	this.TplNames = "auth/login.html"
+	this.SaveFlash()
+	this.Redirect("/login", 302)
 }
 
 func (this *LoginController) Logout(){

@@ -19,7 +19,7 @@ func (this *MainController) Get() {
 		"Keywords" : "RaysGo, Raysmond",
 		})
 
-	this.GoView("index","layout/default")
+	this.TplNames = "index.html"
 }
 
 func (this *MainController) Index() {

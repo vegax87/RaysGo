@@ -30,7 +30,17 @@
 
 <div id="main-wrapper" class="container">
     <div id="message" class="container">
-        <!-- TODO -->
+        {{ if .flash.error }}
+        <div class="alert alert-danger">{{str2html .flash.error}}</div>
+        {{ end }}
+        
+        {{ if .flash.warning }}
+        <div class="alert alert-warning">{{str2html .flash.warning}}</div>
+        {{ end }}
+
+        {{ if .flash.notice }}
+        <div class="alert alert-info">{{str2html .flash.notice}}</div>
+        {{ end }}
     </div>
     <div class="clearfix"></div>
     <div id="content">

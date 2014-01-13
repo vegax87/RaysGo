@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-//	"github.com/astaxie/beego/i18n"
+	// "github.com/astaxie/beego/i18n"
 	"time"
 )
 
@@ -22,6 +22,8 @@ type BaseController struct {
 //	i18n.Locale
 //	user    models.User
 	isLogin bool
+	flash *beego.FlashData
+	newFlash *beego.FlashData
 }
 
 type AuthController struct {
@@ -58,8 +60,56 @@ func (this *BaseController) Prepare() {
 	this.controllerName, this.actionName = this.GetControllerAndAction()
 	this.userSession()
 
+	this.flash = beego.ReadFromRequest(&this.Controller)
+
 	this.Data["PageStartTime"] = time.Now()
 	this.Layout = beego.AppConfig.String("defaultLayout")
+}
+
+func (this *BaseController) getFlash() *beego.FlashData{
+	if this.newFlash == nil{
+		this.newFlash = beego.NewFlash()
+	}
+	return this.newFlash
+}
+
+func (this *BaseController) FlashError(message string, args ...interface{}){
+	this._flash("error", message, args...)
+}
+
+func (this *BaseController) FlashWarning(message string, args ...interface{}){
+	this._flash("warning", message, args...)
+}
+
+func (this *BaseController) FlashNotice(message string, args ...interface{}){
+	this._flash("notice", message, args...)
+}
+
+func (this *BaseController) _flash(key string, message string, args ...interface{}){
+	if key!= "error" && key!="warning" && key!="notice"{
+		return
+	}
+
+	flash := this.getFlash()
+
+	if oldMessage, ok := flash.Data[key]; ok {
+		message = oldMessage + "<br/>" + message
+	}
+
+	switch key{
+	case "error":
+		flash.Error(message, args...)
+	case "waring":
+		flash.Warning(message, args...)
+	case "notice":
+		flash.Notice(message, args...)
+	}
+}
+
+func (this* BaseController) SaveFlash(){
+	if flash := this.newFlash; flash!= nil{
+		flash.Store(&this.Controller)
+	}
 }
 
 func (this *BaseController) setMetas(metas map[string]string) {

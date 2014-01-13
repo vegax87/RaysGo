@@ -16,7 +16,7 @@
                 <li><a href="/contact">Contact</a></li>
                 {{ if .IsLogin }}
                 <li><a href="/user/view/{{.UserId}}">{{.UserName}}</a></li>
-                <li><a href="/user/logout">Logout</a></li>
+                <li><a href="/logout">Logout</a></li>
                 {{ end }}
                 
                 {{ if not .IsLogin }}
