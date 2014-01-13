@@ -1,7 +1,7 @@
 package controllers
 
 import (
-//	"RaysGo/models"
+	"RaysGo/models"
 )
 
 type MainController struct {
@@ -22,6 +22,25 @@ func (this *MainController) Get() {
 	this.TplNames = "index.html"
 }
 
-func (this *MainController) Index() {
-	this.GoView("users")
+func (this *MainController) About(){
+	this.TplNames = "about.html"
+}
+
+// Get implemented contact page
+func (this *MainController) Contact(){
+	this.TplNames = "contact.html"
+}
+
+// Post implemented contact action
+func (this *MainController) ContactPost(){
+	form := models.ContactForm{}
+
+	if e := this.ParseForm(&form); e==nil { 
+		// send contact message
+		this.FlashNotice("Thanks for your contact! We'll reply you as soon as possible!")
+	}else{
+		this.FlashError("All field in contact form is required! Please check it!")
+	}
+
+	this.Redirect("/contact", 302)
 }

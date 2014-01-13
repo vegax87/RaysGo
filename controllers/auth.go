@@ -54,7 +54,10 @@ func (this * LoginController) Login(){
 	}
 
 	this.SaveFlash()
-	this.Redirect("/login", 302)
+	this.Data["Form"] = form
+	this.Data["Title"] = "Login"
+	this.TplNames = "auth/login.html"
+	// this.Redirect("/login", 302)
 }
 
 func (this *LoginController) Logout(){
@@ -95,16 +98,21 @@ func (this *RegisterController) Register(){
 			user.CreateTime = time.Now()
 
 			if _, err = models.Engine.Insert(&user); err == nil{
-				//this.Redirect("/login", 302)
-				this.Redirect("/user/view/" + fmt.Sprintf("%d", user.Id), 302)
+				this.FlashError(user.Name + " registered successfully. Please login now!")
+				this.SaveFlash()
+				this.Redirect("/login", 302)
+				return
+				// this.Redirect("/user/view/" + fmt.Sprintf("%d", user.Id), 302)
 			}
 		} else{
-			for _, verr := range valid.Errors {
-				fmt.Println(verr.Key + " : " + verr.Message)
+			for _, e := range valid.Errors {
+				this.FlashError(e.Key + " : " + e.Message)
 			}
 		}
 	}
 
+	this.SaveFlash()
+	this.Data["Form"] = form
 	this.Data["Title"] = "Register"
 	this.TplNames = "auth/register.html"
 }

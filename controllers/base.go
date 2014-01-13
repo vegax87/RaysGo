@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"RaysGo/models"
 	"github.com/astaxie/beego"
 	// "github.com/astaxie/beego/i18n"
 	"time"
@@ -15,18 +16,22 @@ var (
 
 const ViewFileExtension = ".html"
 
+type NestPreparer interface {
+        NestPrepare()
+}
+
 type BaseController struct {
 	beego.Controller
 	controllerName string
 	actionName     string
-//	i18n.Locale
-//	user    models.User
-	isLogin bool
-	flash *beego.FlashData
-	newFlash *beego.FlashData
+	user           models.User
+	isLogin        bool
+	flash          *beego.FlashData   // flash data from the last action
+	newFlash       *beego.FlashData 
+	//i18n.Locale
 }
 
-type AuthController struct {
+type AuthController struct{
 	BaseController
 }
 
@@ -39,7 +44,7 @@ func (this *BaseController) userSession() {
 	session_uid, _ = this.GetSession("userid").(int)
 	session_role_id, _ = this.GetSession("userrole").(int)
 	session_email, _ = this.GetSession("useremail").(string)
-
+	this.isLogin = false
 	if session_role_id == 0 {
 		this.Data["UserId"] = 0
 		this.Data["UserName"] = ""
@@ -47,11 +52,18 @@ func (this *BaseController) userSession() {
 		this.Data["UserEmail"] = ""
 		this.Data["IsLogin"] = false
 	} else {
+		this.isLogin = true
 		this.Data["IsLogin"] = true
 		this.Data["UserId"] = session_uid
 		this.Data["UserName"] = session_username
 		this.Data["UserRole"] = session_role_id
 		this.Data["UserEmail"] = session_email
+		this.user = models.User{
+			Id : int64(session_uid),
+			Name : session_username,
+			Rid : int64(session_role_id),
+			Email : session_email,
+		}
 	}
 }
 
@@ -64,13 +76,14 @@ func (this *BaseController) Prepare() {
 
 	this.Data["PageStartTime"] = time.Now()
 	this.Layout = beego.AppConfig.String("defaultLayout")
+
+	if app, ok := this.AppController.(NestPreparer); ok {
+		app.NestPrepare()
+    }
 }
 
-func (this *BaseController) getFlash() *beego.FlashData{
-	if this.newFlash == nil{
-		this.newFlash = beego.NewFlash()
-	}
-	return this.newFlash
+func (this *BaseController) User() models.User{
+	return this.user
 }
 
 func (this *BaseController) FlashError(message string, args ...interface{}){
@@ -85,8 +98,15 @@ func (this *BaseController) FlashNotice(message string, args ...interface{}){
 	this._flash("notice", message, args...)
 }
 
+func (this *BaseController) getFlash() *beego.FlashData{
+	if this.newFlash == nil{
+		this.newFlash = beego.NewFlash()
+	}
+	return this.newFlash
+}
+
 func (this *BaseController) _flash(key string, message string, args ...interface{}){
-	if key!= "error" && key!="warning" && key!="notice"{
+	if key != "error" && key != "warning" && key != "notice"{
 		return
 	}
 
@@ -129,6 +149,10 @@ func (this *BaseController) GoView(view ...string) {
 	if len(view) > 0 {
 		this.TplNames = view[0] + ViewFileExtension
 	}
+}
+
+func (this *BaseController) GetParam(key string) string{
+	return this.Ctx.Input.Param(key)
 }
 
 func loadtimes(t time.Time) int {

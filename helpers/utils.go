@@ -7,6 +7,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"time"
+	"strconv"
+	"github.com/russross/blackfriday"
 )
 
 func EncryptPassword(password string, salt []byte) string {
@@ -41,3 +43,24 @@ func ValidatePassword(hashed string, input_password string) bool {
 	}
 	return false
 }
+
+func Str2Int(s string) (int, error){
+	v, e := strconv.Atoi(s)
+	return v, e
+}
+
+func Str2Int64(s string) (int64, error){
+	var(
+		v int
+		e error
+	)
+	if v, e = Str2Int(s); e != nil{
+		return 0, e
+	}
+	return int64(v), e
+}
+
+func Markdown(raw []byte) []byte {
+   return blackfriday.MarkdownCommon(raw)
+}
+

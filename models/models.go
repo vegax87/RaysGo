@@ -21,6 +21,14 @@ const (
 	BLOCKED = 0
 	ACTIVE = 1
 	DELETED = 2
+
+	DRAFT = 0
+	PUBLISHED = 1
+	PRIVATE = 2
+
+	CONTENT_TYPE_HTML = "html"
+	CONTENT_TYPE_TEXT = "text"
+	CONTENT_TYPE_MARKDOWN = "markdown"
 )
 
 // models declaration
@@ -33,8 +41,8 @@ type User struct {
 	CreateTime time.Time `xorm:"index"`
 	LoginTime  time.Time
 	Picture    string
-	Signature  string `form:"signature"`
-	Status     int    `xorm:"not null default 0"`
+	Signature  string
+	Status     int       `xorm:"not null default 0"`
 }
 
 type Role struct {
@@ -59,6 +67,7 @@ type Node struct {
 	Summary     string    `xorm:"text"`
 	CreateTime  time.Time `xorm:"index"`
 	UpdateTime  time.Time
+	Status      int       `xorm:"not null default 0"`
 }
 
 type Category struct {

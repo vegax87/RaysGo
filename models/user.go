@@ -44,3 +44,12 @@ func HasUser(user *User, username string) bool {
 	}
 	return false
 }
+
+func GetUser(id int64) *User{
+	user := &User{Id: id}
+	if has, e := Engine.Get(user); has && e == nil{
+		return user
+	}
+
+	return nil
+}

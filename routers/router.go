@@ -6,8 +6,10 @@ import (
 )
 
 func init() {
-    beego.Router("/", &controllers.MainController{})
-    beego.Router("/index", &controllers.MainController{}, "*:Index")
+    main := new(controllers.MainController)
+    beego.Router("/", main)
+    beego.Router("/about", main, "*:About")
+    beego.Router("/contact", main, "*:Contact;post:ContactPost")
 
     login := new(controllers.LoginController)
     beego.Router("/login", login, "get:Get;post:Login")
@@ -16,7 +18,14 @@ func init() {
     register := new(controllers.RegisterController)
     beego.Router("/register", register, "*:Get;post:Register")
 
-    beego.Router("/user/register", &controllers.UserController{}, "*:Register")
-    beego.Router("/user/view/:id:int", &controllers.UserController{}, "*:View")
-    beego.Router("/user/edit/:id:int", &controllers.UserController{}, "*:Edit")
+    user := new(controllers.UserController)
+    beego.Router("/user/view/:id:int", user, "*:View")
+    beego.Router("/user/edit/:id:int", user, "*:Edit")
+
+    post := new(controllers.PostController)
+    beego.Router("/post/view/:id:int", post, "*:View")
+    beego.Router("/myposts", post, "*:List")
+    beego.Router("/post/new", post, "*:New;post:NewPost")
+    beego.Router("/post/edit", post, "*:Edit;post:EditPost")
+    beego.Router("/post/delete/:id:int", post, "*:Delete")
 }

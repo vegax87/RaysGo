@@ -2,13 +2,13 @@
 
 <form action="/register" method="post" class="form" >
 
-<input type="text" name="UserName" value="" class="form-control" placeholder="User name"  />
+<input type="text" name="UserName" value="{{.Form.UserName}}" class="form-control" placeholder="User name"  />
 
-<input type="text" name="Email" value="" class="form-control" placeholder="Email"  />
+<input type="text" name="Email" value="{{.Form.Email}}" class="form-control" placeholder="Email"  />
 
-<input type="password" name="Password" value="" class="form-control" placeholder="Password"  />
+<input type="password" name="Password" value="{{.Form.Password}}" class="form-control" placeholder="Password"  />
 
-<input type="password" name="PasswordRe" value="" class="form-control" placeholder="Password confirm"  />
+<input type="password" name="PasswordRe" value="{{.Form.PasswordRe}}" class="form-control" placeholder="Password confirm"  />
 
 <input type="submit" name="" value="Register" class="btn btn-info"  />
 </form>
