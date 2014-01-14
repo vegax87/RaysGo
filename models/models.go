@@ -81,9 +81,17 @@ type CategoryTerm struct {
 	Id     int64
 	Uid    int64  `xorm:"index"`
 	Cid    int64  `xorm:"index"`
-	Pid    int64  `xorm:"index default 0"`
+	Pid    int64  `xorm:"index default 0 not null"`
+	Nid    int64  `xorm:"index default 0 not null"`
 	Name   string `xorm:"not null"`
 	Weight int64  `xorm:"default 0"`
+}
+
+// TODO
+type NodeCategoryTerm struct{
+	Id int64
+	Nid int64 `xorm:"index not null"`
+	Tid int64 `xorm:"index not null"`
 }
 
 type Comment struct {

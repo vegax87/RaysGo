@@ -2,6 +2,7 @@ package controllers
 
 import(
 	"time"
+	"strings"
 	"fmt"
 	"RaysGo/models"
 	"RaysGo/helpers"
@@ -25,7 +26,12 @@ func (this *PostController) View(){
 	if node = models.GetNode(id); node == nil{
 		this.Abort("404")
 	}
+
+	if tags, err := models.GetNodeTags(node.Uid, node.Id); err == nil {
+		this.Data["Tags"] = *tags
+	}
 	
+	this.Data["Title"] = node.Title
 	this.Data["Post"] = node
 	this.Data["User"] = models.GetUser(node.Uid)
 	this.Data["CanEdit"] = this.canEditPost(node)
@@ -40,10 +46,10 @@ func (this *PostController) List(){
 	posts := make([]*models.Node, 0)
 	err := models.Engine.Where("Uid = ?", this.User().Id).Find(&posts)
 	if err == nil{
-		for _, post := range posts{
-			post.ParseContent()
-		}
 		this.Data["Posts"] = posts
+		if tags, err := models.GetUserTags(this.User().Id); err == nil {
+			this.Data["Tags"] = *tags
+		}
 	} else {
 		this.Abort("404")
 	}
@@ -74,7 +80,17 @@ func (this *PostController) NewPost(){
 			post.Status = models.GetStatus(form.Status)
 			post.Tid = models.GetNodeType("post")
 
+			tag := strings.TrimSpace(form.Tags)
+			tags := make([]string, 0)
+			tagarr := strings.Split(tag, ",")
+			for _, v := range tagarr {
+				if t := strings.TrimSpace(v); t != "" {
+					tags = append(tags, t)
+				}
+ 			}
+
 			if _, err := models.Engine.Insert(&post); err == nil{
+				models.AddTags(this.User().Id, post.Id, tags)
 				this.FlashNotice("Post created successfully.")
 				this.SaveFlash()
 				this.Redirect("/post/view/" + fmt.Sprintf("%d",post.Id), 302)
@@ -110,6 +126,16 @@ func (this *PostController) Edit(){
 
 	form := models.PostForm{}
 	form.SetData(post)
+
+	tagStr := ""
+	if tags, err := models.GetNodeTags(post.Uid, post.Id); err == nil {
+		comma := ""
+		for _, tag := range *tags {
+			tagStr = tagStr + comma + tag.Name
+			comma = ", "
+		}
+		form.Tags = tagStr
+	}
 
 	this.Data["Title"] = "Edit - " + post.Title
 	this.Data["Post"] = post
@@ -148,7 +174,17 @@ func (this *PostController) EditPost(){
 		post.Status = models.GetStatus(form.Status)
 		post.Tid = models.GetNodeType("post")
 
+		tag := strings.TrimSpace(form.Tags)
+		tags := make([]string, 0)
+		tagarr := strings.Split(tag, ",")
+		for _, v := range tagarr {
+			if t := strings.TrimSpace(v); t != "" {
+				tags = append(tags, t)
+			}
+		}
+
 		if _, err = models.Engine.Id(id).Update(post); err == nil{
+			models.AddTags(this.User().Id, post.Id, tags)
 			result = true
 			this.FlashNotice("Post updated successfully.")
 		} else {

@@ -1,0 +1,12 @@
+{{ if .Tags }}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		My tags
+	</div>
+	<div class="panel-body">
+		{{ range .Tags }}
+			<a href="/post/tag/{{.Name}}" style="padding-right: 5px;">{{.Name}}</a>
+		{{ end }}
+	</div>
+</div>
+{{ end }}

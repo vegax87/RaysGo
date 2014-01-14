@@ -1,16 +1,22 @@
 <div class="page-header"><h1>My posts</h1></div>
-<div>
-<a href="/post/new" class="btn btn-success"> + New post</a>
-</div>
-<div class="post-list">
-{{ range .Posts }}
-<div class="post-item">
-	<a href="/post/view/{{.Id}}"><h2>{{.Title}}</h2></a>
-	<div class="post-content">
-		{{markdown .Content}}
+
+<div class="row">
+	<div style="padding-left: 20px;"><a href="/post/new" class="btn btn-sm btn-success"> + New post </a></div>
+	<div class="col-lg-9 post-list">
+		{{ range .Posts }}
+		<div class="post-item">
+			<h2><a href="/post/view/{{.Id}}">{{.Title}}</a></h2>
+			<div class="post-content">
+				{{markdown .Content}}
+			</div>
+		</div>
+		<hr>
+		{{ end }}	
+	</div>
+
+	<div class="col-lg-3">
+		{{template "post/tags.html" .}}
 	</div>
 </div>
-<hr>
-{{ end }}	
-</div>
+
 
