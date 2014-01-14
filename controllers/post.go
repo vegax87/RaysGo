@@ -240,3 +240,23 @@ func (this *PostController) Comment() {
 	// save comment
 	this.Redirect("/post/view/" + fmt.Sprintf("%d", id), 302)
 }
+
+// TODO
+func (this *PostController) Tag(){
+	name := this.GetParam(":name")
+	tag := models.CategoryTerm{Name : name, Uid : this.User().Id}
+	if has, err := models.Engine.Get(&tag); !has || err != nil{
+		this.Abort("404")
+	}
+	posts := make([]models.Node, 0)
+	models.Engine.Join("inner","node_category_term","node_category_term.nid = node.id").Where("node_category_term.tid = ?", tag.Id).Find(&posts)
+	
+	if tags, err := models.GetUserTags(this.User().Id); err == nil {
+		this.Data["Tags"] = *tags
+	}
+
+	this.Data["Posts"] = posts 
+	this.Data["Tag"] = tag
+	this.Data["Title"] = tag.Name
+	this.TplNames = "post/tag.html"
+}

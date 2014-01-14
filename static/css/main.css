@@ -19,7 +19,18 @@ body{
 	margin-top: 0;
 }
 
+/* Post */
+.post-meta{
+	color: gray;
+}
+
 /* form */
 .form input{
 	margin-bottom: 10px;
+}
+
+/* Comment */
+.comment-form textarea{
+	height: 140px;
+	margin-top: 10px;
 }

@@ -30,6 +30,7 @@ func init() {
 	beego.Router("/post/edit/:id:int", post, "*:Edit;post:EditPost")
 	beego.Router("/post/delete/:id:int", post, "*:Delete")
 	beego.Router("/post/comment/:id:int", post, "post:Comment")
+	beego.Router("/post/tag/:name", post, "*:Tag")
 
 	// admin
 	beego.Router("/admin", &controllers.AdminController{})
