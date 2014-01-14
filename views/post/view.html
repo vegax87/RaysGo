@@ -8,6 +8,13 @@
 {{markdown .Post.Content}}
 </div>
 
+<div>
+<b>Tags: </b>
+{{ range .Tags}}
+<a href="/post/tag/{{.Name}}" style="padding-right: 5px;">{{.Name}}</a>
+{{ end }}
+</div>
+
 {{ if .CanEdit }}
 <hr>
 <div class="actions">

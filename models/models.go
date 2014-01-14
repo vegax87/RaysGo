@@ -82,7 +82,6 @@ type CategoryTerm struct {
 	Uid    int64  `xorm:"index"`
 	Cid    int64  `xorm:"index"`
 	Pid    int64  `xorm:"index default 0 not null"`
-	Nid    int64  `xorm:"index default 0 not null"`
 	Name   string `xorm:"not null"`
 	Weight int64  `xorm:"default 0"`
 }
@@ -92,6 +91,7 @@ type NodeCategoryTerm struct{
 	Id int64
 	Nid int64 `xorm:"index not null"`
 	Tid int64 `xorm:"index not null"`
+	Weight int64 `xorm:"index default 0 not null"`
 }
 
 type Comment struct {
@@ -189,8 +189,8 @@ func InitEngine() (*xorm.Engine, error) {
 	var err error
 	Engine, err = ConnectDb()
 
-	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
-	Engine.SetDefaultCacher(cacher)
+	//cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
+	//Engine.SetDefaultCacher(cacher)
 
 	return Engine, err
 }
@@ -205,6 +205,7 @@ func CreateDb() {
 		new(Comment),
 		new(Category),
 		new(CategoryTerm),
+		new(NodeCategoryTerm),
 		new(Variable),
 		new(File),
 		new(UriAlias)); err != nil {
