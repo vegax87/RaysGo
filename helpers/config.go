@@ -19,6 +19,7 @@ var(
     ResetPwdCodeLives   int
     LoginRememberDays   int
     Langs               []string
+    DefaultLayout       string
 )
 
 func LoadConf(){
@@ -33,5 +34,6 @@ func LoadConf(){
     ActiveCodeLives,_ = beego.AppConfig.Int("ActiveCodeLives")
     ResetPwdCodeLives,_ = beego.AppConfig.Int("ResetPwdCodeLives")
     LoginRememberDays,_ = beego.AppConfig.Int("LoginRememberDays")
+    DefaultLayout = beego.AppConfig.String("DefaultLayout")
 }
 

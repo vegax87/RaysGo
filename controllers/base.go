@@ -86,7 +86,7 @@ func (this *BaseController) Prepare() {
 	this.Data["AppDescription"] = helpers.AppDescription
 	this.Data["AppKeywords"] = helpers.AppKeywords
 	this.Data["AppAuthor"] = helpers.AppAuthor
-	this.Layout = beego.AppConfig.String("defaultLayout")
+	this.Layout = helpers.DefaultLayout
 
 	if app, ok := this.AppController.(AuthPreparer); ok {
 		app.AuthPrepare()
