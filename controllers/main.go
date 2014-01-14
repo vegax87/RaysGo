@@ -9,25 +9,20 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	this.Data["Website"] = "beego.me"
-	this.Data["Email"] = "astaxie@gmail.com"
-
-	this.setMetas(map[string]string{
-		"Title":       "Home",
-		"Author":      "Raysmond",
-		"Description": "Simple blog system in Go!",
-		"Keywords":    "RaysGo, Raysmond",
-	})
+	this.Data["Website"] = "RaysGo"
+	this.Data["Email"] = "jiankunlei@126.com"
 
 	this.TplNames = "index.html"
 }
 
 func (this *MainController) About() {
+	this.Data["Title"] = "About"
 	this.TplNames = "about.html"
 }
 
 // Get implemented contact page
 func (this *MainController) Contact() {
+	this.Data["Title"] = "Contact"
 	this.TplNames = "contact.html"
 }
 

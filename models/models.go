@@ -14,18 +14,22 @@ var (
 )
 
 const (
+	// roles
 	ROLE_ANONYMOUS     = 0
 	ROLE_ADMIN         = 1
 	ROLE_AUTHENTICATED = 2
 
+	// status
 	BLOCKED = 0
 	ACTIVE  = 1
 	DELETED = 2
 
+	// node status
 	DRAFT     = 0
 	PUBLISHED = 1
 	PRIVATE   = 2
 
+	// content types
 	CONTENT_TYPE_HTML     = "html"
 	CONTENT_TYPE_TEXT     = "text"
 	CONTENT_TYPE_MARKDOWN = "markdown"
@@ -86,7 +90,6 @@ type CategoryTerm struct {
 	Weight int64  `xorm:"default 0"`
 }
 
-// TODO
 type NodeCategoryTerm struct {
 	Id     int64
 	Nid    int64 `xorm:"index not null"`
