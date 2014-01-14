@@ -1,6 +1,8 @@
 package models
 
-import ("fmt")
+import (
+	"fmt"
+)
 
 // TODO
 
@@ -8,7 +10,7 @@ const (
 	TAGS = "tags"
 )
 
-func GetNodeTags(uid int64, nid int64) (*[]CategoryTerm, error){
+func GetNodeTags(uid int64, nid int64) (*[]CategoryTerm, error) {
 	tags := make([]CategoryTerm, 0)
 	var (
 		cid int64
@@ -16,25 +18,25 @@ func GetNodeTags(uid int64, nid int64) (*[]CategoryTerm, error){
 	)
 	if cid, err = createTagCategory(uid); err == nil {
 		if nid != 0 {
-			if err = Engine.Join("inner","node_category_term", "node_category_term.tid=category_term.id").Where("category_term.uid = ? and node_category_term.nid = ? and category_term.cid = ?", uid, nid, cid).Find(&tags); err == nil {
+			if err = Engine.Join("inner", "node_category_term", "node_category_term.tid=category_term.id").Where("category_term.uid = ? and node_category_term.nid = ? and category_term.cid = ?", uid, nid, cid).Find(&tags); err == nil {
 			} else {
 				fmt.Println("error")
 				fmt.Println(err)
 			}
 		} else {
-			err = Engine.Where("Uid = ? and Cid = ?", uid, cid).Join("inner","node_category_term", "node_category_term.tid=category_term.id").OrderBy("node_category_term.weight").Find(&tags);
+			err = Engine.Where("Uid = ? and Cid = ?", uid, cid).Join("inner", "node_category_term", "node_category_term.tid=category_term.id").OrderBy("node_category_term.weight").Find(&tags)
 		}
-		
+
 	}
 	return &tags, err
 }
 
-func GetUserTags(uid int64) (*[]CategoryTerm, error){
+func GetUserTags(uid int64) (*[]CategoryTerm, error) {
 	return GetNodeTags(uid, 0)
 }
 
 // Add tags to post
-func AddTags(uid int64, nid int64, tags []string) error{
+func AddTags(uid int64, nid int64, tags []string) error {
 	if len(tags) == 0 {
 		return nil
 	}
@@ -52,7 +54,7 @@ func AddTags(uid int64, nid int64, tags []string) error{
 		// Engine.In("tid", ids...).Delete(&NodeCategoryTerm{})
 
 		var weight int64 = 0
-		for _, t := range tags{
+		for _, t := range tags {
 			if err = createOrUpdateTag(uid, nid, cid, t, weight); err != nil {
 				return err
 			}
@@ -65,32 +67,32 @@ func AddTags(uid int64, nid int64, tags []string) error{
 func createOrUpdateTag(uid int64, nid int64, cid int64, name string, weight int64) error {
 	var err error
 	var term CategoryTerm
-	if term, err = createCategoryTerm(uid, cid, 0, name, 0); err == nil{
+	if term, err = createCategoryTerm(uid, cid, 0, name, 0); err == nil {
 		tag := NodeCategoryTerm{}
 		if has, e := Engine.Where("Nid = ? AND Tid = ?", nid, term.Id).Get(&tag); has {
 			tag.Weight = weight
 			_, err = Engine.Id(tag.Id).Cols("weight").Update(&tag)
 		} else if e == nil {
-			_, err = Engine.Insert(&NodeCategoryTerm{Nid : nid, Tid : term.Id, Weight: weight})
+			_, err = Engine.Insert(&NodeCategoryTerm{Nid: nid, Tid: term.Id, Weight: weight})
 		}
 	}
 	return err
 }
 
-func ExistCategoryTerm(uid int64, parentId int64, name string) (bool, error){
-	term := CategoryTerm{Uid : uid, Name : name, Pid : parentId}
-	has, err :=  Engine.Get(&term)
+func ExistCategoryTerm(uid int64, parentId int64, name string) (bool, error) {
+	term := CategoryTerm{Uid: uid, Name: name, Pid: parentId}
+	has, err := Engine.Get(&term)
 	return has, err
 }
 
-func createCategoryTerm(uid int64, cid int64,  parentId int64, name string, weight int64) (CategoryTerm, error){
-	term := CategoryTerm{Uid : uid, Cid : cid, Name : name, Pid : parentId}
+func createCategoryTerm(uid int64, cid int64, parentId int64, name string, weight int64) (CategoryTerm, error) {
+	term := CategoryTerm{Uid: uid, Cid: cid, Name: name, Pid: parentId}
 	var err error
-	if has, _ :=  Engine.Get(&term); has{
+	if has, _ := Engine.Get(&term); has {
 		return term, nil
 	} else {
 		term.Weight = weight
-		if _, err = Engine.Insert(&term); err == nil{
+		if _, err = Engine.Insert(&term); err == nil {
 			return term, nil
 		}
 	}
@@ -98,14 +100,14 @@ func createCategoryTerm(uid int64, cid int64,  parentId int64, name string, weig
 }
 
 // Create tag category for user if there's no tag category
-func createTagCategory(uid int64) (int64, error){
-	category := Category{Uid : uid, Name : TAGS} 
+func createTagCategory(uid int64) (int64, error) {
+	category := Category{Uid: uid, Name: TAGS}
 	if has, err := Engine.Get(&category); !has && err == nil {
 		category.Description = "User tags for post"
 		if _, e := Engine.Insert(&category); e != nil {
 			return 0, err
 		}
-	} else if err != nil  {
+	} else if err != nil {
 		return 0, err
 	}
 

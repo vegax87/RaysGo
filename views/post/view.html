@@ -22,3 +22,7 @@
 <a href="/post/delete/{{.Post.Id}}" class="btn btn-danger btn-xs">Delete</a>
 </div>
 {{ end }}
+
+<hr>
+<h2>Comments</h2>
+{{template "post/comment_form.html" .}}

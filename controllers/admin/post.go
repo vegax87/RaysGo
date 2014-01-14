@@ -1,10 +1,10 @@
 package admin
 
-import(
+import (
 	"RaysGo/controllers"
 )
 
-type PostController struct{
+type PostController struct {
 	controllers.BaseController
 }
 

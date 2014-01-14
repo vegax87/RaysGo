@@ -1,25 +1,25 @@
 package admin
 
-import(
-	 "RaysGo/controllers"
-	 "RaysGo/models"
-	 "github.com/astaxie/beego/validation"
-	 "fmt"
+import (
+	"RaysGo/controllers"
+	"RaysGo/models"
+	"fmt"
+	"github.com/astaxie/beego/validation"
 )
 
-type ConfigController struct{
+type ConfigController struct {
 	controllers.AdminController
 }
 
-func (this *ConfigController) Config(){
+func (this *ConfigController) Config() {
 	this.Data["Form"] = models.LoadConfig()
 	this.Data["Title"] = "Website configuration"
 	this.TplNames = "admin/config.html"
 }
 
-func (this *ConfigController) ConfigPost(){
-	var(
-		form models.ConfigForm
+func (this *ConfigController) ConfigPost() {
+	var (
+		form  models.ConfigForm
 		valid validation.Validation
 	)
 
@@ -44,4 +44,3 @@ func (this *ConfigController) ConfigPost(){
 	this.Data["Title"] = "Website configuration"
 	this.TplNames = "admin/config.html"
 }
-

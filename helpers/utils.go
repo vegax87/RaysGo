@@ -6,12 +6,11 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/hex"
-	"time"
-	"strconv"
-	"github.com/russross/blackfriday"
 	"github.com/astaxie/beego"
+	"github.com/russross/blackfriday"
 	"html/template"
-
+	"strconv"
+	"time"
 )
 
 func EncryptPassword(password string, salt []byte) string {
@@ -47,27 +46,26 @@ func ValidatePassword(hashed string, input_password string) bool {
 	return false
 }
 
-func Str2Int(s string) (int, error){
+func Str2Int(s string) (int, error) {
 	v, e := strconv.Atoi(s)
 	return v, e
 }
 
-func Str2Int64(s string) (int64, error){
-	var(
+func Str2Int64(s string) (int64, error) {
+	var (
 		v int
 		e error
 	)
-	if v, e = Str2Int(s); e != nil{
+	if v, e = Str2Int(s); e != nil {
 		return 0, e
 	}
 	return int64(v), e
 }
 
 func Markdown(raw []byte) []byte {
-   return blackfriday.MarkdownCommon(raw)
+	return blackfriday.MarkdownCommon(raw)
 }
 
-func MarkdownHtml(s string) template.HTML{
-	 return beego.Str2html(string(Markdown([]byte(s))))
+func MarkdownHtml(s string) template.HTML {
+	return beego.Str2html(string(Markdown([]byte(s))))
 }
-

@@ -43,6 +43,19 @@ func (this *Node) ParseContent() string{
 	return this.Content
 }
 
+func (this *Node) PublishNode(){
+	// todo
+}
+func (this *Node) BlockNode(){
+	// todo
+}
+func (this *Node) PrivateNode(){
+	// todo
+}
+
+func (this *Node) DraftNode(){
+	// todo
+}
 func GetStatusName(status int) string{
 	switch status {
 	case DRAFT:

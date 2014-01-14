@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"RaysGo/models"
 	"RaysGo/helpers"
+	"RaysGo/models"
 )
 
 type UserController struct {
@@ -14,7 +14,7 @@ func (this *UserController) Get() {
 }
 
 func (this *UserController) View() {
-	id,_ := helpers.Str2Int64(this.GetParam(":id"))
+	id, _ := helpers.Str2Int64(this.GetParam(":id"))
 
 	var user = models.User{Id: int64(id)}
 	has, err := models.Engine.Get(&user)
@@ -37,7 +37,7 @@ func (this *UserController) Edit() {
 }
 
 // TODO
-func (this *UserController) EditPost(){
+func (this *UserController) EditPost() {
 	//	id, _ := strconv.Atoi(this.Ctx.Input.Param(":id"))
 
 	this.Data["Title"] = "Edit - "

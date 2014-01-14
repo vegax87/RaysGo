@@ -1,15 +1,15 @@
 package models
 
-import(
+import (
 	"RaysGo/helpers"
 )
 
-type ConfigForm struct{
-	AppName string `valid:"MaxSize(30)"`
+type ConfigForm struct {
+	AppName        string `valid:"MaxSize(30)"`
 	AppDescription string
-	AppKeywords string
-	MailUser string `valid:"Email"`
-	MailFrom string
+	AppKeywords    string
+	MailUser       string `valid:"Email"`
+	MailFrom       string
 }
 
 func (this *ConfigForm) Save() bool {
@@ -29,18 +29,18 @@ func (this *ConfigForm) Save() bool {
 	configs[4].Name = "MailFrom"
 	configs[4].Value = this.MailFrom
 
-	Engine.In("Name", "AppName", "AppDescription", "AppKeywords" , "MailUser", "MailFrom").Delete(&Variable{})
+	Engine.In("Name", "AppName", "AppDescription", "AppKeywords", "MailUser", "MailFrom").Delete(&Variable{})
 	if _, err := Engine.Insert(&configs); err == nil {
 		return true
-	} 
+	}
 	return false
 }
 
-func LoadConfig() *ConfigForm{
+func LoadConfig() *ConfigForm {
 	var configs []Variable
 	result := &ConfigForm{}
-	if err := Engine.In("Name", "AppName", "AppDescription", "AppKeywords" , "MailUser", "MailFrom").Find(&configs); err == nil {
-		for _, config := range configs{
+	if err := Engine.In("Name", "AppName", "AppDescription", "AppKeywords", "MailUser", "MailFrom").Find(&configs); err == nil {
+		for _, config := range configs {
 			switch config.Name {
 			case "AppName":
 				result.AppName = config.Value
@@ -54,26 +54,26 @@ func LoadConfig() *ConfigForm{
 				result.MailFrom = config.Value
 			}
 		}
-	} 
+	}
 
 	return result
 }
 
-func LoadAndSetConfig(){
+func LoadAndSetConfig() {
 	config := LoadConfig()
-    if config.AppName != "" {
-        helpers.AppName = config.AppName
-    }
-    if config.AppDescription != "" {
-        helpers.AppDescription = config.AppDescription
-    }
-    if config.AppName != "" {
-        helpers.AppKeywords = config.AppKeywords
-    }
-    if config.MailUser != "" {
-        helpers.MailUser = config.MailUser
-    }
-    if config.AppName != "" {
-        helpers.MailFrom = config.MailFrom
-    }
+	if config.AppName != "" {
+		helpers.AppName = config.AppName
+	}
+	if config.AppDescription != "" {
+		helpers.AppDescription = config.AppDescription
+	}
+	if config.AppName != "" {
+		helpers.AppKeywords = config.AppKeywords
+	}
+	if config.MailUser != "" {
+		helpers.MailUser = config.MailUser
+	}
+	if config.AppName != "" {
+		helpers.MailFrom = config.MailFrom
+	}
 }

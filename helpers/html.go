@@ -1,11 +1,11 @@
 package helpers
 
-import(
-	"github.com/astaxie/beego/validation"
+import (
 	"fmt"
+	"github.com/astaxie/beego/validation"
 )
 
-func ShowValidationErrors(v *validation.Validation){
+func ShowValidationErrors(v *validation.Validation) {
 	for _, err := range v.Errors {
 		fmt.Println(err.Key + " : " + err.Message)
 	}

@@ -8,7 +8,7 @@ import (
 func CanRegistered(userName string, email string) (bool, bool, error) {
 
 	var users []User
-	if err := Engine.Where("Name = ? or Email = ?", userName, email).Find(&users); err!=nil{
+	if err := Engine.Where("Name = ? or Email = ?", userName, email).Find(&users); err != nil {
 		return false, false, err
 	}
 
@@ -45,9 +45,9 @@ func HasUser(user *User, username string) bool {
 	return false
 }
 
-func GetUser(id int64) *User{
+func GetUser(id int64) *User {
 	user := &User{Id: id}
-	if has, e := Engine.Get(user); has && e == nil{
+	if has, e := Engine.Get(user); has && e == nil {
 		return user
 	}
 

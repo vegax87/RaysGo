@@ -1,33 +1,33 @@
 package controllers
 
 import (
-	 "RaysGo/helpers"
-	 "RaysGo/models"
-	 "fmt"
-	 "github.com/astaxie/beego/validation"
-	 "time"
+	"RaysGo/helpers"
+	"RaysGo/models"
+	"fmt"
+	"github.com/astaxie/beego/validation"
+	"time"
 )
 
-type LoginController struct{
+type LoginController struct {
 	BaseController
 }
 
 // Get implemented login page
-func (this * LoginController) Get(){
+func (this *LoginController) Get() {
 	if this.isLogin {
-		this.Redirect("/user/view/" + fmt.Sprintf("%d", this.User().Id), 302)
+		this.Redirect("/user/view/"+fmt.Sprintf("%d", this.User().Id), 302)
 	}
 	this.Data["Title"] = "Login"
 	this.TplNames = "auth/login.html"
-	
+
 	//loginRedirect := strings.TrimSpace(this.GetString("to"))
 }
 
 // Post implemented login action
-func (this * LoginController) Login(){
-	var(
-		user models.User
-		form models.LoginForm
+func (this *LoginController) Login() {
+	var (
+		user  models.User
+		form  models.LoginForm
 		valid validation.Validation
 	)
 
@@ -44,7 +44,7 @@ func (this * LoginController) Login(){
 				this.SetSession("userrole", int(user.Rid))
 				this.SetSession("useremail", user.Email)
 
-				this.Redirect("/user/view/" + fmt.Sprintf("%d", user.Id), 302)
+				this.Redirect("/user/view/"+fmt.Sprintf("%d", user.Id), 302)
 			}
 		} else {
 			for _, e := range valid.Errors {
@@ -60,7 +60,7 @@ func (this * LoginController) Login(){
 	// this.Redirect("/login", 302)
 }
 
-func (this *LoginController) Logout(){
+func (this *LoginController) Logout() {
 	if session_uid != 0 {
 		this.DestroySession()
 	}
@@ -68,22 +68,22 @@ func (this *LoginController) Logout(){
 	this.Redirect("/", 302)
 }
 
-
-type RegisterController struct{
+type RegisterController struct {
 	BaseController
 }
 
-func (this *RegisterController) Get(){
+func (this *RegisterController) Get() {
 	this.Data["Title"] = "Register"
 	this.TplNames = "auth/register.html"
 }
+
 // Post
-func (this *RegisterController) Register(){
-	var(
-		user models.User
-		form models.RegisterForm
+func (this *RegisterController) Register() {
+	var (
+		user  models.User
+		form  models.RegisterForm
 		valid validation.Validation
-		err error
+		err   error
 	)
 
 	if err = this.ParseForm(&form); err != nil {
@@ -97,14 +97,14 @@ func (this *RegisterController) Register(){
 			user.Rid = models.ROLE_AUTHENTICATED
 			user.CreateTime = time.Now()
 
-			if _, err = models.Engine.Insert(&user); err == nil{
+			if _, err = models.Engine.Insert(&user); err == nil {
 				this.FlashError(user.Name + " registered successfully. Please login now!")
 				this.SaveFlash()
 				this.Redirect("/login", 302)
 				return
 				// this.Redirect("/user/view/" + fmt.Sprintf("%d", user.Id), 302)
 			}
-		} else{
+		} else {
 			for _, e := range valid.Errors {
 				this.FlashError(e.Key + " : " + e.Message)
 			}

@@ -1,0 +1,6 @@
+<form action = "/post/comment/{{.Post.Id}}" method = "post" >
+<input type="text" placeholder="Title" value = "{{.CommentForm.Title}}" class="form-control" />
+<textarea placeholder="Content" class="form-control">{{.CommentForm.Content}}</textarea>
+<br/>
+<input type="submit" value="Add comment" class="btn btn-info" />
+</form>

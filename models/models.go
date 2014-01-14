@@ -14,20 +14,20 @@ var (
 )
 
 const (
-	ROLE_ANONYMOUS = 0
-	ROLE_ADMIN = 1
+	ROLE_ANONYMOUS     = 0
+	ROLE_ADMIN         = 1
 	ROLE_AUTHENTICATED = 2
-	
+
 	BLOCKED = 0
-	ACTIVE = 1
+	ACTIVE  = 1
 	DELETED = 2
 
-	DRAFT = 0
+	DRAFT     = 0
 	PUBLISHED = 1
-	PRIVATE = 2
+	PRIVATE   = 2
 
-	CONTENT_TYPE_HTML = "html"
-	CONTENT_TYPE_TEXT = "text"
+	CONTENT_TYPE_HTML     = "html"
+	CONTENT_TYPE_TEXT     = "text"
 	CONTENT_TYPE_MARKDOWN = "markdown"
 )
 
@@ -42,7 +42,7 @@ type User struct {
 	LoginTime  time.Time
 	Picture    string
 	Signature  string
-	Status     int       `xorm:"not null default 0"`
+	Status     int `xorm:"not null default 0"`
 }
 
 type Role struct {
@@ -67,7 +67,7 @@ type Node struct {
 	Summary     string    `xorm:"text"`
 	CreateTime  time.Time `xorm:"index"`
 	UpdateTime  time.Time
-	Status      int       `xorm:"not null default 0"`
+	Status      int `xorm:"not null default 0"`
 }
 
 type Category struct {
@@ -87,10 +87,10 @@ type CategoryTerm struct {
 }
 
 // TODO
-type NodeCategoryTerm struct{
-	Id int64
-	Nid int64 `xorm:"index not null"`
-	Tid int64 `xorm:"index not null"`
+type NodeCategoryTerm struct {
+	Id     int64
+	Nid    int64 `xorm:"index not null"`
+	Tid    int64 `xorm:"index not null"`
 	Weight int64 `xorm:"index default 0 not null"`
 }
 
@@ -128,7 +128,7 @@ type UriAlias struct {
 }
 
 type Variable struct {
-	Id int64
+	Id    int64
 	Name  string `xorm:"unique not null"`
 	Value string `xorm:"text"`
 }

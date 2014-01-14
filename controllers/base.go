@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"RaysGo/models"
 	"RaysGo/helpers"
+	"RaysGo/models"
 	"github.com/astaxie/beego"
 	// "github.com/astaxie/beego/i18n"
 	"time"
@@ -18,10 +18,10 @@ var (
 const ViewFileExtension = ".html"
 
 type NestPreparer interface {
-        NestPrepare()
+	NestPrepare()
 }
 
-type AuthPreparer interface{
+type AuthPreparer interface {
 	AuthPrepare()
 }
 
@@ -31,12 +31,12 @@ type BaseController struct {
 	actionName     string
 	user           *models.User
 	isLogin        bool
-	flash          *beego.FlashData   // flash data from the last action
-	newFlash       *beego.FlashData 
+	flash          *beego.FlashData // flash data from the last action
+	newFlash       *beego.FlashData
 	//i18n.Locale
 }
 
-type AuthController struct{
+type AuthController struct {
 	BaseController
 }
 
@@ -64,10 +64,10 @@ func (this *BaseController) userSession() {
 		this.Data["UserRole"] = session_role_id
 		this.Data["UserEmail"] = session_email
 		this.user = &models.User{
-			Id : int64(session_uid),
-			Name : session_username,
-			Rid : int64(session_role_id),
-			Email : session_email,
+			Id:    int64(session_uid),
+			Name:  session_username,
+			Rid:   int64(session_role_id),
+			Email: session_email,
 		}
 		this.Data["IsAdmin"] = this.user.IsAdmin()
 	}
@@ -90,38 +90,38 @@ func (this *BaseController) Prepare() {
 
 	if app, ok := this.AppController.(AuthPreparer); ok {
 		app.AuthPrepare()
-    }
+	}
 
 	if app, ok := this.AppController.(NestPreparer); ok {
 		app.NestPrepare()
-    }
+	}
 }
 
-func (this *BaseController) User() *models.User{
+func (this *BaseController) User() *models.User {
 	return this.user
 }
 
-func (this *BaseController) FlashError(message string, args ...interface{}){
+func (this *BaseController) FlashError(message string, args ...interface{}) {
 	this._flash("error", message, args...)
 }
 
-func (this *BaseController) FlashWarning(message string, args ...interface{}){
+func (this *BaseController) FlashWarning(message string, args ...interface{}) {
 	this._flash("warning", message, args...)
 }
 
-func (this *BaseController) FlashNotice(message string, args ...interface{}){
+func (this *BaseController) FlashNotice(message string, args ...interface{}) {
 	this._flash("notice", message, args...)
 }
 
-func (this *BaseController) getFlash() *beego.FlashData{
-	if this.newFlash == nil{
+func (this *BaseController) getFlash() *beego.FlashData {
+	if this.newFlash == nil {
 		this.newFlash = beego.NewFlash()
 	}
 	return this.newFlash
 }
 
-func (this *BaseController) _flash(key string, message string, args ...interface{}){
-	if key != "error" && key != "warning" && key != "notice"{
+func (this *BaseController) _flash(key string, message string, args ...interface{}) {
+	if key != "error" && key != "warning" && key != "notice" {
 		return
 	}
 
@@ -131,7 +131,7 @@ func (this *BaseController) _flash(key string, message string, args ...interface
 		message = oldMessage + "<br/>" + message
 	}
 
-	switch key{
+	switch key {
 	case "error":
 		flash.Error(message, args...)
 	case "waring":
@@ -141,8 +141,8 @@ func (this *BaseController) _flash(key string, message string, args ...interface
 	}
 }
 
-func (this* BaseController) SaveFlash(){
-	if flash := this.newFlash; flash!= nil{
+func (this *BaseController) SaveFlash() {
+	if flash := this.newFlash; flash != nil {
 		flash.Store(&this.Controller)
 	}
 }
@@ -166,7 +166,7 @@ func (this *BaseController) GoView(view ...string) {
 	}
 }
 
-func (this *BaseController) GetParam(key string) string{
+func (this *BaseController) GetParam(key string) string {
 	return this.Ctx.Input.Param(key)
 }
 
