@@ -38,7 +38,7 @@ const (
 // models declaration
 type User struct {
 	Id         int64
-	IRole   Role      `xorm:"index rid int(11)"`
+	IRole      Role      `xorm:"index rid int(11)"`
 	Name       string    `xorm:"not null unique"`
 	Email      string    `xorm:"not null unique"`
 	Password   string    `xorm:"not null"`
@@ -63,7 +63,7 @@ type NodeType struct {
 
 type Node struct {
 	Id          int64
-	IUser       User     `xorm:"index uid int(11)"`
+	IUser       User      `xorm:"index uid int(11)"`
 	INodeType   NodeType  `xorm:"index tid int(11)"`
 	Title       string    `xorm:"not null"`
 	Content     string    `xorm:"text"`
@@ -76,32 +76,32 @@ type Node struct {
 
 type Category struct {
 	Id          int64
-	IUser       User  `xorm:"index uid int(11)"`
+	IUser       User   `xorm:"index uid int(11)"`
 	Name        string `xorm:"not null"`
 	Description string `xorm:"text"`
 }
 
 type CategoryTerm struct {
-	Id     int64
-	IUser  User  `xorm:"index uid int(11) not null"`
-	ICategory   Category  `xorm:"index cid int(11) not null"`
-	Pid    int64  `xorm:"index not null default 0"`
-	Name   string `xorm:"not null"`
-	Weight int64  `xorm:"default 0"`
+	Id        int64
+	IUser     User     `xorm:"index uid int(11) not null"`
+	ICategory Category `xorm:"index cid int(11) not null"`
+	Pid       int64    `xorm:"index not null default 0"`
+	Name      string   `xorm:"not null"`
+	Weight    int64    `xorm:"default 0"`
 }
 
 type NodeCategoryTerm struct {
-	Id     int64
-	INode  Node  `xorm:"index nid int(11) not null"`
-	ICategoryTerm CategoryTerm  `xorm:"index tid int(11) not null"`
-	Weight int64 `xorm:"index default 0 not null"`
+	Id            int64
+	INode         Node         `xorm:"index nid int(11) not null"`
+	ICategoryTerm CategoryTerm `xorm:"index tid int(11) not null"`
+	Weight        int64        `xorm:"index default 0 not null"`
 }
 
 type Comment struct {
 	Id           int64
-	IUser User `xorm:"index user_id int(11) not null default 0"`
-	Pid          int64         `xorm:"index not null default 0"`
-	INode        Node `xorm:"index nid int(11)"`
+	IUser        User  `xorm:"index user_id int(11) not null default 0"`
+	Pid          int64 `xorm:"index not null default 0"`
+	INode        Node  `xorm:"index nid int(11)"`
 	Title        string
 	Content      string `xorm:"text"`
 	ContentType  string
@@ -116,7 +116,7 @@ type Comment struct {
 
 type File struct {
 	Id        int64
-	IUser User   `xorm:"index uid int(11) not null"`
+	IUser     User   `xorm:"index uid int(11) not null"`
 	Name      string `xorm:"not null"`
 	Uri       string `xorm:"not null"`
 	Size      int64  `xorm:"not null default 0"`

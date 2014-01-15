@@ -12,7 +12,7 @@ func (this *AdminController) Get() {
 
 func (this *AdminController) AuthPrepare() {
 	if !this.isLogin {
-		this.Redirect("/login?to="+ this.Ctx.Input.Uri(), 302)
+		this.Redirect("/login?to="+this.Ctx.Input.Uri(), 302)
 		return
 	}
 

@@ -31,11 +31,6 @@ func GetNode(id int64) *Node{
 	return nil
 }
 
-func DelNode(id int64) error{
-	_, e := Engine.Id(id).Delete(new(Node))
-	return e
-}
-
 func (this *Node) ParseContent() string{
 	if this.ContentType == CONTENT_TYPE_MARKDOWN {
 		return string(helpers.Markdown([]byte(this.Content)))
@@ -43,19 +38,6 @@ func (this *Node) ParseContent() string{
 	return this.Content
 }
 
-func (this *Node) PublishNode(){
-	// todo
-}
-func (this *Node) BlockNode(){
-	// todo
-}
-func (this *Node) PrivateNode(){
-	// todo
-}
-
-func (this *Node) DraftNode(){
-	// todo
-}
 func GetStatusName(status int) string{
 	switch status {
 	case DRAFT:

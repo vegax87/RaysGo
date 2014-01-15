@@ -66,7 +66,7 @@ func (this *BaseController) userSession() {
 		this.user = &models.User{
 			Id:    int64(session_uid),
 			Name:  session_username,
-			IRole: models.Role{Id:int64(session_role_id)},
+			IRole: models.Role{Id: int64(session_role_id)},
 			Email: session_email,
 		}
 		this.Data["IsAdmin"] = this.user.IsAdmin()

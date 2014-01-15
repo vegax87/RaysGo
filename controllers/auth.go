@@ -5,8 +5,8 @@ import (
 	"RaysGo/models"
 	"fmt"
 	"github.com/astaxie/beego/validation"
-	"time"
 	"strings"
+	"time"
 )
 
 type LoginController struct {
@@ -21,9 +21,9 @@ func (this *LoginController) Get() {
 	this.Data["Title"] = "Login"
 	this.TplNames = "auth/login.html"
 
-    if loginRedirect := strings.TrimSpace(this.GetString("to")); loginRedirect!="" {
-    	this.Redirect(loginRedirect, 302)
-    }
+	if loginRedirect := strings.TrimSpace(this.GetString("to")); loginRedirect != "" {
+		this.Redirect(loginRedirect, 302)
+	}
 }
 
 // Post implemented login action
@@ -97,7 +97,7 @@ func (this *RegisterController) Register() {
 			user.Email = form.Email
 			user.Password = helpers.EncryptPassword(form.Password, nil)
 			user.Status = models.ACTIVE
-			user.IRole = models.Role{Id : models.ROLE_AUTHENTICATED}
+			user.IRole = models.Role{Id: models.ROLE_AUTHENTICATED}
 			user.CreateTime = time.Now()
 
 			if _, err = models.Engine.Insert(&user); err == nil {

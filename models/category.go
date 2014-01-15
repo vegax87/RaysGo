@@ -18,9 +18,9 @@ func GetNodeTags(uid int64, nid int64) (*[]CategoryTerm, error) {
 	)
 	if cid, err = createTagCategory(uid); err == nil {
 		if nid != 0 {
+			// TODO
 			if err = Engine.Join("inner", "node_category_term", "node_category_term.tid=category_term.id").Where("category_term.uid = ? and node_category_term.nid = ? and category_term.cid = ?", uid, nid, cid).Find(&tags); err == nil {
-			//if err = Engine.Where("uid = ? AND cid = ? AND nid = ?", uid, cid, nid).OrderBy("Weight").Find(&tags); err == nil{
-				//
+				//if err = Engine.Where("uid = ? AND cid = ? AND nid = ?", uid, cid, nid).OrderBy("Weight").Find(&tags); err == nil{
 			} else {
 				fmt.Println("error")
 				fmt.Println(err)
@@ -51,7 +51,7 @@ func AddTags(uid int64, nid int64, tags []string) error {
 		//ids := make([]int64, 0)
 		for _, v := range *nodeTags {
 			//ids = append(ids, v.Id)
-			Engine.Delete(&NodeCategoryTerm{ICategoryTerm : CategoryTerm{Id : v.Id}})
+			Engine.Delete(&NodeCategoryTerm{ICategoryTerm: CategoryTerm{Id: v.Id}})
 		}
 		// cannot use ids (type []int64) as type []interface {} in function argument
 		// Engine.In("tid", ids...).Delete(&NodeCategoryTerm{})
@@ -72,24 +72,24 @@ func createOrUpdateTag(uid int64, nid int64, cid int64, name string, weight int6
 	var term CategoryTerm
 	if term, err = createCategoryTerm(uid, cid, 0, name, 0); err == nil {
 		tag := NodeCategoryTerm{}
-		if has, e := Engine.Where("nid = ? AND tid = ?", nid, term.Id).Get(&tag); has && e == nil{
+		if has, e := Engine.Where("nid = ? AND tid = ?", nid, term.Id).Get(&tag); has && e == nil {
 			tag.Weight = weight
 			_, err = Engine.Id(tag.Id).Cols("weight").Update(&tag)
 		} else if e == nil {
-			_, err = Engine.Insert(&NodeCategoryTerm{INode : Node{Id : nid}, ICategoryTerm: CategoryTerm{Id : term.Id}, Weight: weight})
+			_, err = Engine.Insert(&NodeCategoryTerm{INode: Node{Id: nid}, ICategoryTerm: CategoryTerm{Id: term.Id}, Weight: weight})
 		}
 	}
 	return err
 }
 
 func ExistCategoryTerm(uid int64, parentId int64, name string) (bool, error) {
-	term := CategoryTerm{IUser: User{Id : uid}, Name: name, Pid: parentId}
+	term := CategoryTerm{IUser: User{Id: uid}, Name: name, Pid: parentId}
 	has, err := Engine.Get(&term)
 	return has, err
 }
 
 func createCategoryTerm(uid int64, cid int64, parentId int64, name string, weight int64) (CategoryTerm, error) {
-	term := CategoryTerm{IUser: User{Id : uid}, ICategory: Category{Id : cid}, Name: name, Pid: parentId}
+	term := CategoryTerm{IUser: User{Id: uid}, ICategory: Category{Id: cid}, Name: name, Pid: parentId}
 	var err error
 	if has, _ := Engine.Get(&term); has {
 		return term, nil
@@ -104,7 +104,7 @@ func createCategoryTerm(uid int64, cid int64, parentId int64, name string, weigh
 
 // Create tag category for user if there's no tag category
 func createTagCategory(uid int64) (int64, error) {
-	category := Category{IUser: User{ Id: uid }, Name: TAGS}
+	category := Category{IUser: User{Id: uid}, Name: TAGS}
 	if has, err := Engine.Get(&category); !has && err == nil {
 		category.Description = "User tags for post"
 		if _, e := Engine.Insert(&category); e != nil {

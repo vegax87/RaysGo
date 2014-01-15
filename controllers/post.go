@@ -31,7 +31,7 @@ func (this *PostController) View() {
 		this.Data["Tags"] = *tags
 	}
 
-	if comments, err := models.GetNodeComments(id); err == nil{
+	if comments, err := models.GetNodeComments(id); err == nil {
 		this.Data["Comments"] = comments
 	}
 
@@ -86,8 +86,8 @@ func (this *PostController) NewPost() {
 			post.ContentType = form.ContentType
 			post.CreateTime = time.Now()
 			post.Status = models.GetStatus(form.Status)
-			post.IUser = models.User{Id : this.User().Id}
-			post.INodeType = models.NodeType{Id : models.GetNodeType("post")}
+			post.IUser = models.User{Id: this.User().Id}
+			post.INodeType = models.NodeType{Id: models.GetNodeType("post")}
 
 			tag := strings.TrimSpace(form.Tags)
 			tags := make([]string, 0)
@@ -102,7 +102,7 @@ func (this *PostController) NewPost() {
 				models.AddTags(this.User().Id, post.Id, tags)
 				this.FlashNotice("Post created successfully.")
 				this.SaveFlash()
-				this.Redirect("/post/view/" + fmt.Sprintf("%d", post.Id), 302)
+				this.Redirect("/post/view/"+fmt.Sprintf("%d", post.Id), 302)
 				return
 			}
 		} else {
@@ -226,7 +226,7 @@ func (this *PostController) Delete() {
 	id, _ := helpers.Str2Int64(this.GetParam(":id"))
 	post := models.GetNode(id)
 	if post != nil && this.canEditPost(post) {
-		if err := models.DelNode(id); err == nil {
+		if _, err := models.Engine.Id(id).Delete(&models.Comment{}); err == nil {
 			this.FlashNotice("Post was deleted successfully.")
 			this.SaveFlash()
 			this.Redirect("/myposts", 302)
@@ -259,17 +259,17 @@ func (this *PostController) Comment() {
 				pid, _ = helpers.Str2Int64(form.ReplyTo)
 			}
 			comment := models.Comment{
-				Pid: pid, // TODO: dealing with comment replies 
-				INode: models.Node{Id : id}, 
-				IUser : models.User{Id : this.User().Id},
-				Title : form.Title, 
-				Content : form.Content, 
-				ContentType : models.CONTENT_TYPE_MARKDOWN, 
-				CreateTime : time.Now(), 
-				Status : models.ACTIVE,
-				UserHost : this.Ctx.Input.IP(),
+				Pid:         pid, // TODO: dealing with comment replies
+				INode:       models.Node{Id: id},
+				IUser:       models.User{Id: this.User().Id},
+				Title:       form.Title,
+				Content:     form.Content,
+				ContentType: models.CONTENT_TYPE_MARKDOWN,
+				CreateTime:  time.Now(),
+				Status:      models.ACTIVE,
+				UserHost:    this.Ctx.Input.IP(),
 			}
-			if _, err = models.Engine.Insert(&comment) ; err == nil{ // comment saved 
+			if _, err = models.Engine.Insert(&comment); err == nil { // comment saved
 				this.FlashNotice("Your comment was saved successfully.")
 			} else {
 				this.FlashNotice("Sorry, internal error!")
@@ -279,33 +279,33 @@ func (this *PostController) Comment() {
 				this.FlashError(m.Key + " : " + m.Message)
 			}
 			this.Data["CommentForm"] = form
-			this.Ctx.Redirect(302, "/post/view/" + fmt.Sprintf("%d", id))
+			this.Ctx.Redirect(302, "/post/view/"+fmt.Sprintf("%d", id))
 		}
 	}
-	
+
 	this.SaveFlash()
 	this.RedirectPost(id)
 }
 
 // TODO
-func (this *PostController) Tag(){
+func (this *PostController) Tag() {
 	name := this.GetParam(":name")
-	tag := models.CategoryTerm{Name : name, IUser : models.User{Id : this.User().Id}}
-	if has, err := models.Engine.Get(&tag); !has || err != nil{
+	tag := models.CategoryTerm{Name: name, IUser: models.User{Id: this.User().Id}}
+	if has, err := models.Engine.Get(&tag); !has || err != nil {
 		this.Abort("404")
 	}
 	posts := make([]models.Node, 0)
-	models.Engine.Join("inner","node_category_term","node_category_term.nid = node.id").Where("node_category_term.tid = ?", tag.Id).Find(&posts)
+	models.Engine.Join("inner", "node_category_term", "node_category_term.nid = node.id").Where("node_category_term.tid = ?", tag.Id).Find(&posts)
 	if tags, err := models.GetUserTags(this.User().Id); err == nil {
 		this.Data["Tags"] = *tags
 	}
 
-	this.Data["Posts"] = posts 
+	this.Data["Posts"] = posts
 	this.Data["Tag"] = tag
 	this.Data["Title"] = tag.Name
 	this.TplNames = "post/tag.html"
 }
 
-func (this *PostController) RedirectPost(id int64){
-	this.Ctx.Redirect(302, "/post/view/" + fmt.Sprintf("%d", id))
+func (this *PostController) RedirectPost(id int64) {
+	this.Ctx.Redirect(302, "/post/view/"+fmt.Sprintf("%d", id))
 }
