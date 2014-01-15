@@ -8,9 +8,9 @@ import(
 
 func AddComment(title string, content string, contentType string, uid int64, postId int64, pid int64, status int) error {
 	comment := Comment{
-		Uid: uid, 
+		IUser: User{Id: uid}, 
 		Pid: pid, 
-		Nid: postId, 
+		INode: Node{Id : postId}, 
 		Title : title, 
 		Content : content, 
 		ContentType : contentType, 

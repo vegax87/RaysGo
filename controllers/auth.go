@@ -41,7 +41,7 @@ func (this *LoginController) Login() {
 			if has && gerr == nil && helpers.ValidatePassword(user.Password, form.Password) {
 				this.SetSession("username", user.Name)
 				this.SetSession("userid", int(user.Id))
-				this.SetSession("userrole", int(user.Rid))
+				this.SetSession("userrole", int(user.IRole.Id))
 				this.SetSession("useremail", user.Email)
 
 				this.Redirect("/user/view/"+fmt.Sprintf("%d", user.Id), 302)
@@ -94,7 +94,7 @@ func (this *RegisterController) Register() {
 			user.Email = form.Email
 			user.Password = helpers.EncryptPassword(form.Password, nil)
 			user.Status = models.ACTIVE
-			user.Rid = models.ROLE_AUTHENTICATED
+			user.IRole = models.Role{Id : models.ROLE_AUTHENTICATED}
 			user.CreateTime = time.Now()
 
 			if _, err = models.Engine.Insert(&user); err == nil {

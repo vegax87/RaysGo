@@ -31,7 +31,7 @@ func InsertUser() {
 		Name:     "admin",
 		Email:    "admin@gmail.com",
 		Password: helpers.EncryptPassword("admin", nil),
-		Rid:      ROLE_ADMIN,
+		IRole:     Role{Id : ROLE_ADMIN},
 		Status:   ACTIVE,
 	}
 
@@ -41,7 +41,7 @@ func InsertUser() {
 		Name:     "hello",
 		Email:    "raysmond@gmail.com",
 		Password: helpers.EncryptPassword("111111", nil),
-		Rid:      ROLE_AUTHENTICATED,
+		IRole:     Role{Id : ROLE_AUTHENTICATED},
 		Status:   ACTIVE,
 	}
 

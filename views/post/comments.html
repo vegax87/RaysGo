@@ -4,6 +4,7 @@
 		{{ if .Title }}
 		<div class="comment-title">{{.Title}}</div>
 		{{ end }}
+		<div class="comment-meta">By {{ .IUser.Name }} at {{.CreateTime}}</div>
 		{{markdown .Content }}
 	</div>
 	<hr>

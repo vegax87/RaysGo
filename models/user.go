@@ -55,5 +55,5 @@ func GetUser(id int64) *User {
 }
 
 func (this *User) IsAdmin() bool {
-	return this.Rid == ROLE_ADMIN
+	return this.IRole.Id == ROLE_ADMIN
 }

@@ -41,6 +41,11 @@ body{
 
 }
 
+.comment-meta{
+	color:gray;
+	font-size: 12px;
+}
+
 .comment-item .comment-title{
 	font-weight: bold;
 }

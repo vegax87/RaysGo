@@ -15,7 +15,7 @@ type PostController struct {
 
 // Actions only available for login users
 func (this *PostController) AuthActions() []string {
-	return []string{"List", "New", "NewPost", "Edit", "EditPost", "Delete"}
+	return []string{"List", "New", "NewPost", "Edit", "EditPost", "Delete", "Tag", "Comment"}
 }
 
 // View a post
@@ -27,7 +27,7 @@ func (this *PostController) View() {
 		this.Abort("404")
 	}
 
-	if tags, err := models.GetNodeTags(node.Uid, node.Id); err == nil {
+	if tags, err := models.GetNodeTags(node.IUser.Id, node.Id); err == nil {
 		this.Data["Tags"] = *tags
 	}
 
@@ -42,7 +42,7 @@ func (this *PostController) View() {
 
 	this.Data["Title"] = node.Title
 	this.Data["Post"] = node
-	this.Data["User"] = models.GetUser(node.Uid)
+	this.Data["User"] = models.GetUser(node.IUser.Id)
 	this.Data["CanEdit"] = this.canEditPost(node)
 	this.TplNames = "post/view.html"
 }
@@ -85,9 +85,9 @@ func (this *PostController) NewPost() {
 			post.Content = form.Content
 			post.ContentType = form.ContentType
 			post.CreateTime = time.Now()
-			post.Uid = this.User().Id
 			post.Status = models.GetStatus(form.Status)
-			post.Tid = models.GetNodeType("post")
+			post.IUser = models.User{Id : this.User().Id}
+			post.INodeType = models.NodeType{Id : models.GetNodeType("post")}
 
 			tag := strings.TrimSpace(form.Tags)
 			tags := make([]string, 0)
@@ -102,7 +102,7 @@ func (this *PostController) NewPost() {
 				models.AddTags(this.User().Id, post.Id, tags)
 				this.FlashNotice("Post created successfully.")
 				this.SaveFlash()
-				this.Redirect("/post/view/"+fmt.Sprintf("%d", post.Id), 302)
+				this.Redirect("/post/view/" + fmt.Sprintf("%d", post.Id), 302)
 				return
 			}
 		} else {
@@ -137,7 +137,7 @@ func (this *PostController) Edit() {
 	form.SetData(post)
 
 	tagStr := ""
-	if tags, err := models.GetNodeTags(post.Uid, post.Id); err == nil {
+	if tags, err := models.GetNodeTags(post.IUser.Id, post.Id); err == nil {
 		comma := ""
 		for _, tag := range *tags {
 			tagStr = tagStr + comma + tag.Name
@@ -179,9 +179,9 @@ func (this *PostController) EditPost() {
 		post.Content = form.Content
 		post.ContentType = form.ContentType
 		post.CreateTime = time.Now()
-		post.Uid = this.User().Id
+		post.IUser.Id = this.User().Id
 		post.Status = models.GetStatus(form.Status)
-		post.Tid = models.GetNodeType("post")
+		post.INodeType.Id = models.GetNodeType("post")
 
 		tag := strings.TrimSpace(form.Tags)
 		tags := make([]string, 0)
@@ -216,7 +216,7 @@ func (this *PostController) EditPost() {
 }
 
 func (this *PostController) canEditPost(post *models.Node) bool {
-	if this.isLogin && (this.User().Id == post.Uid || this.User().Rid == models.ROLE_ADMIN) {
+	if this.isLogin && (this.User().Id == post.IUser.Id || this.User().IRole.Id == models.ROLE_ADMIN) {
 		return true
 	}
 	return false
@@ -255,9 +255,9 @@ func (this *PostController) Comment() {
 	if err = this.ParseForm(&form); err == nil {
 		if ok, e := valid.Valid(form); ok && e == nil {
 			comment := models.Comment{
-				Uid: this.User().Id, 
 				Pid: 0, // TODO: dealing with comment replies 
-				Nid: id, 
+				INode: models.Node{Id : id}, 
+				IUser : models.User{Id : this.User().Id},
 				Title : form.Title, 
 				Content : form.Content, 
 				ContentType : models.CONTENT_TYPE_MARKDOWN, 
@@ -286,13 +286,12 @@ func (this *PostController) Comment() {
 // TODO
 func (this *PostController) Tag(){
 	name := this.GetParam(":name")
-	tag := models.CategoryTerm{Name : name, Uid : this.User().Id}
+	tag := models.CategoryTerm{Name : name, IUser : models.User{Id : this.User().Id}}
 	if has, err := models.Engine.Get(&tag); !has || err != nil{
 		this.Abort("404")
 	}
 	posts := make([]models.Node, 0)
 	models.Engine.Join("inner","node_category_term","node_category_term.nid = node.id").Where("node_category_term.tid = ?", tag.Id).Find(&posts)
-	
 	if tags, err := models.GetUserTags(this.User().Id); err == nil {
 		this.Data["Tags"] = *tags
 	}
