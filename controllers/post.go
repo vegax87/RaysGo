@@ -31,6 +31,15 @@ func (this *PostController) View() {
 		this.Data["Tags"] = *tags
 	}
 
+	if comments, err := models.GetNodeComments(id); err == nil{
+		this.Data["Comments"] = comments
+	}
+
+	var form models.PostForm
+	if err := this.ParseForm(&form); err == nil {
+		this.Data["CommentForm"] = form
+	}
+
 	this.Data["Title"] = node.Title
 	this.Data["Post"] = node
 	this.Data["User"] = models.GetUser(node.Uid)
@@ -121,7 +130,7 @@ func (this *PostController) Edit() {
 	if !this.canEditPost(post) {
 		this.FlashError("Sorry, you don't have the permission to edit the post!")
 		this.SaveFlash()
-		this.Redirect("/post/view/"+fmt.Sprintf("%d", post.Id), 302)
+		this.RedirectPost(id)
 	}
 
 	form := models.PostForm{}
@@ -237,8 +246,41 @@ func (this *PostController) Comment() {
 	if post == nil {
 		this.Abort("404")
 	}
-	// save comment
-	this.Redirect("/post/view/" + fmt.Sprintf("%d", id), 302)
+	var (
+		valid validation.Validation
+		form  models.CommentForm
+		err   error
+	)
+
+	if err = this.ParseForm(&form); err == nil {
+		if ok, e := valid.Valid(form); ok && e == nil {
+			comment := models.Comment{
+				Uid: this.User().Id, 
+				Pid: 0, // TODO: dealing with comment replies 
+				Nid: id, 
+				Title : form.Title, 
+				Content : form.Content, 
+				ContentType : models.CONTENT_TYPE_MARKDOWN, 
+				CreateTime : time.Now(), 
+				Status : models.ACTIVE,
+				UserHost : this.Ctx.Input.IP(),
+			}
+			if _, err = models.Engine.Insert(&comment) ; err == nil{ // comment saved 
+				this.FlashNotice("Your comment was saved successfully.")
+			} else {
+				this.FlashNotice("Sorry, internal error!")
+			}
+		} else {
+			for _, m := range valid.Errors {
+				this.FlashError(m.Key + " : " + m.Message)
+			}
+			this.Data["CommentForm"] = form
+			this.Ctx.Redirect(302, "/post/view/" + fmt.Sprintf("%d", id))
+		}
+	}
+	
+	this.SaveFlash()
+	this.RedirectPost(id)
 }
 
 // TODO
@@ -259,4 +301,8 @@ func (this *PostController) Tag(){
 	this.Data["Tag"] = tag
 	this.Data["Title"] = tag.Name
 	this.TplNames = "post/tag.html"
+}
+
+func (this *PostController) RedirectPost(id int64){
+	this.Ctx.Redirect(302, "/post/view/" + fmt.Sprintf("%d", id))
 }

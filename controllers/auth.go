@@ -102,7 +102,6 @@ func (this *RegisterController) Register() {
 				this.SaveFlash()
 				this.Redirect("/login", 302)
 				return
-				// this.Redirect("/user/view/" + fmt.Sprintf("%d", user.Id), 302)
 			}
 		} else {
 			for _, e := range valid.Errors {

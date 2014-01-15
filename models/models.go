@@ -107,6 +107,7 @@ type Comment struct {
 	ContentType  string
 	CreateTime   time.Time `xorm:"index"`
 	UpdateTime   time.Time `xorm:"index"`
+	Status       int
 	UserHost     string
 	UserName     string
 	UserEmail    string

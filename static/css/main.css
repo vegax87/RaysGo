@@ -34,3 +34,13 @@ body{
 	height: 140px;
 	margin-top: 10px;
 }
+.comments{
+
+}
+.comment-item{
+
+}
+
+.comment-item .comment-title{
+	font-weight: bold;
+}
