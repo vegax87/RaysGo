@@ -8,7 +8,7 @@
     <meta name="keywords" content="{{.AppKeywords}}">
     <meta name="author" content="{{.AppAuthor}}">
 
-    <title>{{.Title}} - {{.AppName}}</title>
+    <title>{{ if .Title}} {{.Title}} | {{ end }} {{.AppName}}</title>
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/static/css/main.css" rel="stylesheet"/>
 

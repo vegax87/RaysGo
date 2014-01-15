@@ -242,8 +242,8 @@ func (this *PostController) Delete() {
 
 func (this *PostController) Comment() {
 	id, _ := helpers.Str2Int64(this.GetParam(":id"))
-	post := models.GetNode(id)
-	if post == nil {
+	var post *models.Node
+	if post = models.GetNode(id); post == nil {
 		this.Abort("404")
 	}
 	var (
@@ -254,8 +254,12 @@ func (this *PostController) Comment() {
 
 	if err = this.ParseForm(&form); err == nil {
 		if ok, e := valid.Valid(form); ok && e == nil {
+			var pid int64 = 0
+			if form.ReplyTo != "" {
+				pid, _ = helpers.Str2Int64(form.ReplyTo)
+			}
 			comment := models.Comment{
-				Pid: 0, // TODO: dealing with comment replies 
+				Pid: pid, // TODO: dealing with comment replies 
 				INode: models.Node{Id : id}, 
 				IUser : models.User{Id : this.User().Id},
 				Title : form.Title, 

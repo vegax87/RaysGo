@@ -12,7 +12,7 @@ func (this *AdminController) Get() {
 
 func (this *AdminController) AuthPrepare() {
 	if !this.isLogin {
-		this.Redirect("/login", 302)
+		this.Redirect("/login?to="+ this.Ctx.Input.Uri(), 302)
 		return
 	}
 
@@ -34,7 +34,7 @@ func (this *AuthController) AuthPrepare() {
 				if !this.isLogin {
 					this.FlashError("Please login first!")
 					this.SaveFlash()
-					this.Redirect("/login", 302)
+					this.Ctx.Redirect(302, "/login")
 					return
 				} else {
 					break
@@ -46,7 +46,7 @@ func (this *AuthController) AuthPrepare() {
 			// abort all actions if no auth actions are declared
 			this.FlashError("Please login first!")
 			this.SaveFlash()
-			this.Redirect("/login", 302)
+			this.Ctx.Redirect(302, "/login")
 		}
 	}
 }

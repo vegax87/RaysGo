@@ -25,7 +25,7 @@ func AddNodeType(typeName string, description string) *NodeType{
 
 func GetNode(id int64) *Node{
 	node := &Node{Id: id}
-	if has, e := Engine.Get(node); has && e == nil{
+	if has, e := Engine.Cascade(true).Get(node); has && e == nil{
 		return node
 	}
 	return nil

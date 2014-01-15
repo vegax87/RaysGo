@@ -24,7 +24,7 @@ func AddComment(title string, content string, contentType string, uid int64, pos
 
 func GetNodeComments(nid int64) ([]Comment, error){
 	comments := make([]Comment, 0)
-	err := Engine.Where("Nid = ? AND Status = ?", nid, ACTIVE).Find(&comments)
+	err := Engine.Where("Nid = ? AND Status = ?", nid, ACTIVE).Cascade(true).Find(&comments)
 	return comments, err
 }
 

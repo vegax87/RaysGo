@@ -40,6 +40,14 @@ body{
 .comment-item{
 
 }
+.comment-item .reply-link{
+	float: right;
+	margin-top: -20px;
+	display: none;
+}
+.comment-item:hover .reply-link{
+	display: block;
+}
 
 .comment-meta{
 	color:gray;

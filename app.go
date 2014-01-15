@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	models.CreateDb()
+	models.InitDB()
 
 	helpers.AddViewFunc()
 

@@ -6,7 +6,18 @@
 		{{ end }}
 		<div class="comment-meta">By {{ .IUser.Name }} at {{.CreateTime}}</div>
 		{{markdown .Content }}
+		<div class="reply-link"><a href="javascript:replyTo({{.Id}}, '{{.IUser.Name}}')">Reply</a></div>
 	</div>
 	<hr>
 {{ end }}	
 </div>
+
+
+<script>
+function replyTo(commentId, userName){
+	$("#comment-reply-to").val(commentId);
+	$("#comment-form textarea").prepend("@" + userName);
+	var height = $("#comment-form").offset().top;
+	$("html,body").animate({scrollTop:height},500);
+}
+</script>

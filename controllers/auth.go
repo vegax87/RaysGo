@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/validation"
 	"time"
+	"strings"
 )
 
 type LoginController struct {
@@ -20,7 +21,9 @@ func (this *LoginController) Get() {
 	this.Data["Title"] = "Login"
 	this.TplNames = "auth/login.html"
 
-	//loginRedirect := strings.TrimSpace(this.GetString("to"))
+    if loginRedirect := strings.TrimSpace(this.GetString("to")); loginRedirect!="" {
+    	this.Redirect(loginRedirect, 302)
+    }
 }
 
 // Post implemented login action
@@ -98,7 +101,7 @@ func (this *RegisterController) Register() {
 			user.CreateTime = time.Now()
 
 			if _, err = models.Engine.Insert(&user); err == nil {
-				this.FlashError(user.Name + " registered successfully. Please login now!")
+				this.FlashNotice(user.Name + " registered successfully. Please login now!")
 				this.SaveFlash()
 				this.Redirect("/login", 302)
 				return

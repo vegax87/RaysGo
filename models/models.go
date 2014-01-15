@@ -193,14 +193,14 @@ func InitEngine() (*xorm.Engine, error) {
 	var err error
 	Engine, err = ConnectDb()
 
-	//cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
-	//Engine.SetDefaultCacher(cacher)
+	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
+	Engine.SetDefaultCacher(cacher)
 
 	return Engine, err
 }
 
 // Create database instance according to the models declaration
-func CreateDb() {
+func InitDB() {
 	if err := Engine.Sync(
 		new(User),
 		new(Role),
@@ -218,4 +218,5 @@ func CreateDb() {
 		fmt.Println("Database sync successfully.")
 	}
 
+	//Engine.ShowSQL = true
 }

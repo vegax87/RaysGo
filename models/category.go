@@ -26,7 +26,7 @@ func GetNodeTags(uid int64, nid int64) (*[]CategoryTerm, error) {
 				fmt.Println(err)
 			}
 		} else {
-			err = Engine.Distinct("Name").Where("category_term.uid = ? and category_term.cid = ?", uid, cid).Join("inner", "node_category_term", "node_category_term.tid=category_term.id").OrderBy("node_category_term.weight").Find(&tags)
+			err = Engine.Distinct("Name").Cascade(false).Where("category_term.uid = ? and category_term.cid = ?", uid, cid).Join("inner", "node_category_term", "node_category_term.tid=category_term.id").OrderBy("node_category_term.weight").Find(&tags)
 			//err = Engine.Distinct("Name").Where("uid = ? AND cid = ?", uid, cid).OrderBy("Weight").Find(&tags)
 		}
 
