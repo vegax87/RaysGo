@@ -3,7 +3,7 @@ package routers
 import (
 	"RaysGo/controllers"
 	"RaysGo/controllers/admin"
-	"github.com/astaxie/beego"
+	"github.com/astaxie/beego" 
 )
 
 func init() {

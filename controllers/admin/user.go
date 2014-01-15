@@ -3,8 +3,7 @@ package admin
 import (
 	"RaysGo/controllers"
 	"RaysGo/helpers"
-	"Raysgo/models"
-	"fmt"
+	"RaysGo/models"
 )
 
 type UserController struct {
@@ -13,7 +12,7 @@ type UserController struct {
 
 // TODO
 func (this *UserController) Delete() {
-	id, _ := helpers.Str2Int64(this.GetParam(":id"))
+	//id, _ := helpers.Str2Int64(this.GetParam(":id"))
 
 }
 
@@ -27,9 +26,9 @@ func (this *UserController) List() {
 func (this *UserController) Active() {
 	id, _ := helpers.Str2Int64(this.GetParam(":id"))
 	user := models.User{}
-	if _, err := models.E.Id(id).Get(&user); err == nil {
+	if _, err := models.Engine.Id(id).Get(&user); err == nil {
 		user.Status = models.ACTIVE
-		if e := models.E.Id(id).Update(&user); e == nil {
+		if _, e := models.Engine.Id(id).Update(&user); e == nil {
 			// do something
 		} else {
 			// do something
@@ -40,9 +39,9 @@ func (this *UserController) Active() {
 func (this *UserController) Block() {
 	id, _ := helpers.Str2Int64(this.GetParam(":id"))
 	user := models.User{}
-	if _, err := models.E.Id(id).Get(&user); err == nil {
+	if _, err := models.Engine.Id(id).Get(&user); err == nil {
 		user.Status = models.BLOCKED
-		if e := models.E.Id(id).Update(&user); e == nil {
+		if _, e := models.Engine.Id(id).Update(&user); e == nil {
 			// do something
 		} else {
 			// do something

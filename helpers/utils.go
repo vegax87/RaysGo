@@ -69,3 +69,37 @@ func Markdown(raw []byte) []byte {
 func MarkdownHtml(s string) template.HTML {
 	return beego.Str2html(string(Markdown([]byte(s))))
 }
+
+/* time */
+
+// the begin time of today
+func ThisDate() time.Time {
+        t := time.Now()
+        year, month, day := t.Date()
+
+        return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+}
+
+// the begin time of this week
+func ThisWeek() time.Time {
+        t := time.Now()
+        year, month, day := t.AddDate(0, 0, -1*int(t.Weekday())).Date()
+
+        return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+}
+
+// the begin time of this month
+func ThisMonth() time.Time {
+        t := time.Now()
+        year, month, _ := t.Date()
+
+        return time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+}
+
+// the begin time of this year
+func ThisYear() time.Time {
+        t := time.Now()
+        year, _, _ := t.Date()
+
+        return time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+}

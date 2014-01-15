@@ -26,6 +26,8 @@ func (this *PostController) View() {
 	if node = models.GetNode(id); node == nil {
 		this.Abort("404")
 	}
+	
+	node.UpdateCounter()
 
 	if tags, err := models.GetNodeTags(node.IUser.Id, node.Id); err == nil {
 		this.Data["Tags"] = *tags

@@ -72,6 +72,7 @@ type Node struct {
 	CreateTime  time.Time `xorm:"index"`
 	UpdateTime  time.Time
 	Status      int `xorm:"not null default 0"`
+	ICounter    Counter   `xorm:"index counter_id int(11)"`
 }
 
 type Category struct {
@@ -129,6 +130,14 @@ type UriAlias struct {
 	Id     int64
 	Source string `xorm:"not null"`
 	Uri    string `xorm:"not null"`
+}
+
+type Counter struct{
+	Id int64
+	DayCount int `xorm:"not null default 0"`
+	WeekCount int `xorm:"not null default 0"`
+	TotalCount int64 `xorm:"index not null default 0"`
+	Timestamp time.Time
 }
 
 type Variable struct {
@@ -212,6 +221,7 @@ func InitDB() {
 		new(NodeCategoryTerm),
 		new(Variable),
 		new(File),
+		new(Counter),
 		new(UriAlias)); err != nil {
 		fmt.Println("Database sync failed: ", err)
 	} else {
