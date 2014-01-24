@@ -8,3 +8,8 @@ type ContactForm struct {
 	Title    string `valid:"Required"`
 	Content  string `valid:"Required"`
 }
+
+// TODO
+func SendContactMail(title string, content string, fromEmail string, fromName string) error{
+	return nil
+}

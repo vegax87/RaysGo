@@ -57,19 +57,20 @@ func (this *BaseController) userSession() {
 		this.Data["UserEmail"] = ""
 		this.Data["IsLogin"] = false
 	} else {
-		this.isLogin = true
-		this.Data["IsLogin"] = true
-		this.Data["UserId"] = session_uid
-		this.Data["UserName"] = session_username
-		this.Data["UserRole"] = session_role_id
-		this.Data["UserEmail"] = session_email
 		this.user = &models.User{
 			Id:    int64(session_uid),
 			Name:  session_username,
 			IRole: models.Role{Id: int64(session_role_id)},
 			Email: session_email,
 		}
+
+		this.isLogin = true
+		this.Data["IsLogin"] = true
 		this.Data["IsAdmin"] = this.user.IsAdmin()
+		this.Data["UserId"] = session_uid
+		this.Data["UserName"] = session_username
+		this.Data["UserRole"] = session_role_id
+		this.Data["UserEmail"] = session_email
 	}
 }
 
@@ -78,6 +79,7 @@ func (this *BaseController) Prepare() {
 	this.userSession()
 	this.flash = beego.ReadFromRequest(&this.Controller)
 
+	// load configuration
 	helpers.LoadConf()
 	models.LoadAndSetConfig()
 
@@ -86,8 +88,11 @@ func (this *BaseController) Prepare() {
 	this.Data["AppDescription"] = helpers.AppDescription
 	this.Data["AppKeywords"] = helpers.AppKeywords
 	this.Data["AppAuthor"] = helpers.AppAuthor
+
+	// default layout
 	this.Layout = helpers.DefaultLayout
 
+	// filter users 
 	if app, ok := this.AppController.(AuthPreparer); ok {
 		app.AuthPrepare()
 	}
@@ -170,6 +175,3 @@ func (this *BaseController) GetParam(key string) string {
 	return this.Ctx.Input.Param(key)
 }
 
-func loadtimes(t time.Time) int {
-	return int(time.Now().Sub(t).Nanoseconds() / 1e6)
-}
