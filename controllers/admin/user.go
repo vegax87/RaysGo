@@ -17,7 +17,30 @@ func (this *UserController) Delete() {
 }
 
 func (this *UserController) List() {
+	page := 1
+	pagesize := 10
 
+	if v, err := helpers.Str2Int(this.GetParam(":page")); err == nil {
+		page = v
+		if page <= 0 {
+			page = 1
+		}
+	}
+
+	if v, err := helpers.Str2Int(this.GetParam(":pagesize")); err == nil {
+		pagesize = v
+	}
+
+	users := make([]models.User, 0)
+	models.Engine.OrderBy("id desc").Limit(pagesize, (page-1)*pagesize).Find(&users)
+	count, _ := models.Engine.Count(new(models.User))
+
+	this.Data["Page"] = page
+	this.Data["PageSize"] = pagesize
+	this.Data["Total"] = int(count)
+	if len(users) > 0 {
+		this.Data["Users"] = users
+	}
 	this.Data["Title"] = "Users Administration"
 	this.TplNames = "admin/user_list.html"
 }

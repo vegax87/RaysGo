@@ -26,7 +26,7 @@ $ ./app
 Then, you can view the website in the browser: `http://localhost:8080`. Currently, the application uses MySQL for storage and when you run `./app` command, the corresponding database will be created and initialized according to the configuration file [app.conf](https://github.com/Raysmond/RaysGo/blob/master/conf/app.conf).
 
 
-## Goal
+## Functionality
 A common blog system supports following features:
 * User registration and login, authorization, and etc..
 * A user can publish posts and comments
@@ -40,7 +40,7 @@ A common blog system supports following features:
 * Content editor types: `text`, `html`, `markdown`
 * Other functions in a blog system
 
-## References
+## Vendors & Powers
 * [beego](https://github.com/astaxie/beego) : An open-source, high-performance web framework for the Go
 * [bootstrap](http://getbootstrap.com/) : A front-end framework
 * [xorm](https://github.com/lunny/xorm) : A Simple and Powerful ORM for Go

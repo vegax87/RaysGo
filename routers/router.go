@@ -37,4 +37,7 @@ func init() {
 
 	config := new(admin.ConfigController)
 	beego.Router("/admin/config", config, "*:Config;post:ConfigPost")
+	
+	adminUser := new(admin.UserController)
+	beego.Router("/admin/users", adminUser, "*:List")
 }

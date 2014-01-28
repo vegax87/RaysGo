@@ -103,3 +103,4 @@ func ThisYear() time.Time {
 
         return time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
 }
+
