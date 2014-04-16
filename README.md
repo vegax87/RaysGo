@@ -46,4 +46,11 @@ A common blog system supports following features:
 * [xorm](https://github.com/lunny/xorm) : A Simple and Powerful ORM for Go
 * [Blackfriday]() : a Markdown processor implemented in Go
 
+## Screenshots
+* New posts
+![New posts](/screenshots/new-post.png)
+* My posts
+![My posts](/screenshots/myposts.png)
+
+
 
