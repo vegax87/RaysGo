@@ -1,0 +1,28 @@
+<div class="page-header"><h1>Posts</h1></div>
+
+<div class="row">
+	<div style="padding-left: 20px;"><a href="/post/new" class="btn btn-sm btn-success"> + New post </a></div>
+	<div class="col-lg-9 post-list">
+		{{ range .Posts }}
+		<div class="post-item">
+			<h2><a href="/post/view/{{.Id}}">{{.Title}}</a></h2>
+			<div class="post-content">
+				{{markdown .Content}}
+			</div>
+		</div>
+		<hr>
+		{{ end }}	
+	</div>
+</div>
+<div class="row">
+Total: {{.Total}} &nbsp; &nbsp; Current Page: {{.CurrentPage}} &nbsp; &nbsp;
+{{ if .PrevPage }}
+ <a href="/posts?page={{.PrevPage}}" class="btn btn-info btn-xs"> Prev page</a>
+{{end}}
+
+{{ if .NextPage }}
+ <a href="/posts?page={{.NextPage}}" class="btn btn-info btn-xs">Next page</a>
+{{end}}
+</div>
+
+

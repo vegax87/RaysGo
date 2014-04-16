@@ -24,6 +24,7 @@ func init() {
 	beego.Router("/user/edit/:id:int", user, "*:Edit")
 
 	post := new(controllers.PostController)
+	beego.Router("/posts", post, "*:Posts")
 	beego.Router("/myposts", post, "*:List")
 	beego.Router("/post/new", post, "*:New;post:NewPost")
 	beego.Router("/post/view/:id:int", post, "*:View")

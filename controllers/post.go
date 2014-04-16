@@ -49,13 +49,43 @@ func (this *PostController) View() {
 	this.TplNames = "post/view.html"
 }
 
+// All posts
+ func(this *PostController) Posts(){
+ 	this.TplNames = "post/posts.html"
+	this.Data["Title"] = "Posts"
+
+	page, _:= helpers.Str2Int64(this.GetString("page"))
+	total, _ := models.Engine.Count(new(models.Node))
+
+	posts := make([]*models.Node, 0)
+	err := models.Engine.Desc("id").Limit(10, (int)((page-1)*10)).Find(&posts)
+	if err == nil {
+		this.Data["Posts"] = posts
+		this.Data["Total"] = total
+		pages := total/10
+		if total%10 > 0 {
+			pages++
+		}
+		this.Data["Pages"] = pages
+		this.Data["CurrentPage"] = page
+		if page < pages {
+			this.Data["NextPage"] = page + 1
+		}
+		if page > 1{
+			this.Data["PrevPage"] = page - 1
+		}
+	} else {
+		this.Abort("404")
+	}
+ }
+
 // My posts
 func (this *PostController) List() {
 	this.TplNames = "post/myposts.html"
 	this.Data["Title"] = "My posts"
 
 	posts := make([]*models.Node, 0)
-	err := models.Engine.Where("Uid = ?", this.User().Id).Find(&posts)
+	err := models.Engine.Where("Uid = ?", this.User().Id).Desc("id").Find(&posts)
 	if err == nil {
 		this.Data["Posts"] = posts
 		if tags, err := models.GetUserTags(this.User().Id); err == nil {
